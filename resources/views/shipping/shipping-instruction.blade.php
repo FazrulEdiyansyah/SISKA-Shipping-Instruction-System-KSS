@@ -1,0 +1,399 @@
+@extends('layouts.app')
+
+@section('title', 'Shipping Instruction - SISKA')
+@section('page-title', 'Shipping Instruction')
+@section('page-subtitle', 'Create new shipping instruction document')
+
+@section('content')
+<div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="bg-white rounded-xl shadow-sm mb-6">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">Create New Shipping Instruction</h3>
+                    <p class="text-sm text-gray-600 mt-1">Fill in the details below to generate shipping instruction document</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                    <span class="text-sm text-gray-600">Ready to Create</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <form action="/shipping-instruction" method="POST" class="space-y-6">
+        @csrf
+        <input type="hidden" name="number" value="" id="docNumberInput">
+        
+        <!-- Document Information Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-file-alt text-blue-500 mr-2"></i>
+                    Document Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Basic document identification details</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- Place & Date -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
+                        <div class="flex gap-2">
+                            <input type="text" name="place" 
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                                   placeholder="e.g., Cilegon" required>
+                            <input type="date" name="date"
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                   required>
+                        </div>
+                        <p class="text-xs text-gray-500">Document issuance location and date</p>
+                    </div>
+                    <!-- Addressed To -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Addressed To *</label>
+                        <select name="to" id="vendorInput"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                required>
+                            <option value="">-- Select Vendor --</option>
+                            @foreach($vendors as $vendor)
+                                <option value="{{ $vendor->company }}">{{ $vendor->company }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-xs text-gray-500">Company or organization name</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vessel Information Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-ship text-blue-500 mr-2"></i>
+                    Vessel Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Details about the vessel and its registration</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
+                        <input type="text" name="tugbarge" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required>
+                        <p class="text-xs text-gray-500">Vessel name and identification</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Flag State *</label>
+                        <input type="text" name="flag" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., Indonesia" required>
+                        <p class="text-xs text-gray-500">Country of vessel registration</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parties Information Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-users text-blue-500 mr-2"></i>
+                    Parties Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Shipper, consignee, and notification details</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
+                        <input type="text" name="shipper" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., PT Dizamatra Powerindo" required>
+                        <p class="text-xs text-gray-500">Company shipping the goods</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
+                        <input type="text" name="consignee" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., To the order" required>
+                        <p class="text-xs text-gray-500">Company receiving the goods</p>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Notify Address *</label>
+                    <textarea name="notify_address" rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                              placeholder="e.g., PLTU Palton Unit 7-8" required></textarea>
+                    <p class="text-xs text-gray-500">Complete address for notifications</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Port & Route Information Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>
+                    Port & Route Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Loading and discharging port details</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Port of Loading *</label>
+                        <input type="text" name="port_loading" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., Jetty Patratani, Muara Enim, Indonesia" required>
+                        <p class="text-xs text-gray-500">Port where cargo will be loaded</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Port of Discharging *</label>
+                        <input type="text" name="port_discharging" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., PLTU Palton Unit 7-8" required>
+                        <p class="text-xs text-gray-500">Port where cargo will be discharged</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cargo Information Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-boxes text-blue-500 mr-2"></i>
+                    Cargo Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Details about the cargo being shipped</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Commodities *</label>
+                        <input type="text" name="commodities" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., Indonesian Steam Coal in Bulk" required>
+                        <p class="text-xs text-gray-500">Type of goods being shipped</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Quantity *</label>
+                        <input type="text" name="quantity" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                               placeholder="e.g., 8.500 MT +/- 10%" required>
+                        <p class="text-xs text-gray-500">Amount and measurement unit</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule & Terms Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
+                    Schedule & Terms
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Scheduling and additional terms information</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
+                        <div class="flex gap-2">
+                            <input type="date" name="laycan_start"
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                   required>
+                            <span class="flex items-center px-2">to</span>
+                            <input type="date" name="laycan_end"
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                   required>
+                        </div>
+                        <p class="text-xs text-gray-500">Loading/discharge window period</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signatory Section -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-signature text-blue-500 mr-2"></i>
+                    Signatory (Tanda Tangan Dokumen)
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Person who will sign the document</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Signatory *</label>
+                    <select name="signed_by" id="signatorySelect"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required>
+                        <option value="">-- Select Signatory --</option>
+                        @foreach($signatories as $signatory)
+                            <option value="{{ $signatory->name }} - {{ $signatory->position }} {{ $signatory->department->name ?? '' }}" data-position="{{ $signatory->position }}" data-department="{{ $signatory->department->name ?? '' }}">
+                                {{ $signatory->name }} - {{ $signatory->position }} {{ $signatory->department->name ?? '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <input type="hidden" name="position" id="signatoryPosition" value="">
+                    <input type="hidden" name="department" id="signatoryDepartment" value="">
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <div class="flex items-center text-sm text-gray-600">
+                        <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                        <span>All fields marked with (*) are required</span>
+                    </div>
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <button type="submit" formaction="/shipping-instruction/save"
+                            class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
+                            <i class="fas fa-save mr-2"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{{-- Notifikasi sukses --}}
+@if(session('success'))
+    <div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between max-w-md w-full px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200 shadow-lg">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="font-medium">{{ session('success') }}</span>
+        </div>
+        <button onclick="closeAlert()" class="ml-4 text-green-600 hover:text-green-800 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+@endif
+
+<style>
+/* Custom styles untuk form yang lebih profesional */
+.form-section {
+    transition: all 0.3s ease;
+}
+
+.form-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+input:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.gradient-button {
+    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+}
+
+/* Animasi untuk notifikasi */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+#successAlert {
+    animation: slideInDown 0.3s ease-out;
+}
+</style>
+
+<script>
+function closeAlert() {
+    const alert = document.getElementById('successAlert');
+    if (alert) {
+        alert.style.animation = 'slideOutUp 0.3s ease-in forwards';
+        setTimeout(() => {
+            alert.remove();
+        }, 300);
+    }
+}
+
+// Auto close notifikasi setelah 5 detik
+document.addEventListener('DOMContentLoaded', function() {
+    const successAlert = document.getElementById('successAlert');
+    if (successAlert) {
+        setTimeout(() => {
+            closeAlert();
+        }, 5000);
+    }
+
+    const vendorInput = document.getElementById('vendorInput');
+    const docNumberInput = document.getElementById('docNumberInput');
+    const signatorySelect = document.getElementById('signatorySelect');
+    const signatoryPosition = document.getElementById('signatoryPosition');
+    const signatoryDepartment = document.getElementById('signatoryDepartment');
+    if(signatorySelect) {
+        signatorySelect.addEventListener('change', function() {
+            const selected = signatorySelect.options[signatorySelect.selectedIndex];
+            signatoryPosition.value = selected.getAttribute('data-position') || '';
+            signatoryDepartment.value = selected.getAttribute('data-department') || '';
+        });
+    }
+
+    vendorInput.addEventListener('blur', function() {
+        const vendor = vendorInput.value;
+        if (vendor.length > 0) {
+            fetch('/shipping-instruction/generate-number', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ vendor })
+            })
+            .then(res => res.json())
+            .then(data => {
+                docNumberInput.value = data.document_number;
+            });
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('input', function() {
+            // No preview button, so nothing to update here
+        });
+    }
+});
+
+// Tambah animasi slide out
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideOutUp {
+        from {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+@endsection
