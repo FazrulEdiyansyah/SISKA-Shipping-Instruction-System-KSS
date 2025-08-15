@@ -25,6 +25,7 @@
     <!-- Form Section -->
     <form action="/shipping-instruction" method="POST" class="space-y-6">
         @csrf
+        <input type="hidden" name="number" value="" id="docNumberInput">
         
         <!-- Document Information Section -->
         <div class="bg-white rounded-xl shadow-sm">
@@ -36,19 +37,31 @@
                 <p class="text-sm text-gray-600 mt-1">Basic document identification details</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- Place & Date -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Document Number *</label>
-                        <input type="text" name="number" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., 009/SI/KSS-BLT/VIII/2025" required>
-                        <p class="text-xs text-gray-500">Unique document identification number</p>
+                        <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
+                        <div class="flex gap-2">
+                            <input type="text" name="place" 
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
+                                   placeholder="e.g., Cilegon" required>
+                            <input type="date" name="date"
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                   required>
+                        </div>
+                        <p class="text-xs text-gray-500">Document issuance location and date</p>
                     </div>
+                    <!-- Addressed To -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Addressed To *</label>
-                        <input type="text" name="to" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., PT BERLIAN LINTAS TAMA" required>
+                        <select name="to" id="vendorInput"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                required>
+                            <option value="">-- Select Vendor --</option>
+                            @foreach($vendors as $vendor)
+                                <option value="{{ $vendor->company }}">{{ $vendor->company }}</option>
+                            @endforeach
+                        </select>
                         <p class="text-xs text-gray-500">Company or organization name</p>
                     </div>
                 </div>
@@ -191,64 +204,45 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
-                        <input type="text" name="laycan" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., 18 - 19 August 2025" required>
+                        <div class="flex gap-2">
+                            <input type="date" name="laycan_start"
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                   required>
+                            <span class="flex items-center px-2">to</span>
+                            <input type="date" name="laycan_end"
+                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                   required>
+                        </div>
                         <p class="text-xs text-gray-500">Loading/discharge window period</p>
                     </div>
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Place & Date *</label>
-                        <input type="text" name="place_date" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., Cilegon, 13 August 2025" required>
-                        <p class="text-xs text-gray-500">Document issuance location and date</p>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-gray-700">Remarks *</label>
-                    <textarea name="remarks" rows="4"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                              placeholder="e.g., Freight Payable as Per Charter Party (SPAL)" required></textarea>
-                    <p class="text-xs text-gray-500">Additional terms and conditions</p>
                 </div>
             </div>
         </div>
 
-        <!-- Authorization Section -->
+        <!-- Signatory Section -->
         <div class="bg-white rounded-xl shadow-sm">
-            <div class="p-4 border-b border-gray-200">
-                <h4 class="text-base font-semibold text-gray-900 flex items-center">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-signature text-blue-500 mr-2"></i>
-                    Authorization & Signature
+                    Signatory (Tanda Tangan Dokumen)
                 </h4>
-                <p class="text-sm text-gray-600 mt-1">Select authorized signatory for this document</p>
+                <p class="text-sm text-gray-600 mt-1">Person who will sign the document</p>
             </div>
-            <div class="p-4">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Select Authorized Signatory *</label>
-                        <select name="signatory_id" onchange="updateSignatoryInfo()" id="signatorySelect"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" required>
-                            <option value="">Choose Signatory...</option>
-                            <option value="1" data-name="Miftahul A.N. Basori" data-position="Procurement & ITSM Manager">Miftahul A.N. Basori - Procurement & ITSM Manager</option>
-                            <option value="2" data-name="Joko Susanto" data-position="Operations Director">Joko Susanto - Operations Director</option>
-                            <option value="3" data-name="Rina Pratiwi" data-position="Finance Manager">Rina Pratiwi - Finance Manager</option>
-                        </select>
-                        <p class="text-xs text-gray-500">Select from approved signatory list</p>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Alternative Signatory</label>
-                        <input type="text" name="signed_by" id="manualSignatory"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="Manual entry if needed">
-                        <p class="text-xs text-gray-500">Manual override if needed</p>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Position/Title</label>
-                    <input type="text" name="position" id="signatoryPosition"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                           placeholder="Position will be auto-filled" required>
+            <div class="p-6">
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Signatory *</label>
+                    <select name="signed_by" id="signatorySelect"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required>
+                        <option value="">-- Select Signatory --</option>
+                        @foreach($signatories as $signatory)
+                            <option value="{{ $signatory->name }} - {{ $signatory->position }} {{ $signatory->department->name ?? '' }}" data-position="{{ $signatory->position }}" data-department="{{ $signatory->department->name ?? '' }}">
+                                {{ $signatory->name }} - {{ $signatory->position }} {{ $signatory->department->name ?? '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <input type="hidden" name="position" id="signatoryPosition" value="">
+                    <input type="hidden" name="department" id="signatoryDepartment" value="">
                 </div>
             </div>
         </div>
@@ -261,14 +255,11 @@
                         <i class="fas fa-info-circle text-blue-500 mr-2"></i>
                         <span>All fields marked with (*) are required</span>
                     </div>
-                    <div class="flex space-x-3">
-                        <button type="button" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200 font-medium">
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <button type="submit" formaction="/shipping-instruction/save"
+                            class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
                             <i class="fas fa-save mr-2"></i>
-                            Save Draft
-                        </button>
-                        <button type="submit" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg transition duration-200 font-medium shadow-lg">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Generate & Download PDF
+                            Save
                         </button>
                     </div>
                 </div>
@@ -276,6 +267,23 @@
         </div>
     </form>
 </div>
+
+{{-- Notifikasi sukses --}}
+@if(session('success'))
+    <div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between max-w-md w-full px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200 shadow-lg">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="font-medium">{{ session('success') }}</span>
+        </div>
+        <button onclick="closeAlert()" class="ml-4 text-green-600 hover:text-green-800 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+@endif
 
 <style>
 /* Custom styles untuk form yang lebih profesional */
@@ -295,23 +303,97 @@ input:focus, textarea:focus {
 .gradient-button {
     background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
 }
+
+/* Animasi untuk notifikasi */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+#successAlert {
+    animation: slideInDown 0.3s ease-out;
+}
 </style>
 
 <script>
-function updateSignatoryInfo() {
-    const select = document.getElementById('signatorySelect');
-    const selectedOption = select.options[select.selectedIndex];
-    
-    if (selectedOption.value) {
-        const name = selectedOption.getAttribute('data-name');
-        const position = selectedOption.getAttribute('data-position');
-        
-        document.getElementById('manualSignatory').value = name;
-        document.getElementById('signatoryPosition').value = position;
-    } else {
-        document.getElementById('manualSignatory').value = '';
-        document.getElementById('signatoryPosition').value = '';
+function closeAlert() {
+    const alert = document.getElementById('successAlert');
+    if (alert) {
+        alert.style.animation = 'slideOutUp 0.3s ease-in forwards';
+        setTimeout(() => {
+            alert.remove();
+        }, 300);
     }
 }
+
+// Auto close notifikasi setelah 5 detik
+document.addEventListener('DOMContentLoaded', function() {
+    const successAlert = document.getElementById('successAlert');
+    if (successAlert) {
+        setTimeout(() => {
+            closeAlert();
+        }, 5000);
+    }
+
+    const vendorInput = document.getElementById('vendorInput');
+    const docNumberInput = document.getElementById('docNumberInput');
+    const signatorySelect = document.getElementById('signatorySelect');
+    const signatoryPosition = document.getElementById('signatoryPosition');
+    const signatoryDepartment = document.getElementById('signatoryDepartment');
+    if(signatorySelect) {
+        signatorySelect.addEventListener('change', function() {
+            const selected = signatorySelect.options[signatorySelect.selectedIndex];
+            signatoryPosition.value = selected.getAttribute('data-position') || '';
+            signatoryDepartment.value = selected.getAttribute('data-department') || '';
+        });
+    }
+
+    vendorInput.addEventListener('blur', function() {
+        const vendor = vendorInput.value;
+        if (vendor.length > 0) {
+            fetch('/shipping-instruction/generate-number', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ vendor })
+            })
+            .then(res => res.json())
+            .then(data => {
+                docNumberInput.value = data.document_number;
+            });
+        }
+    });
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('input', function() {
+            // No preview button, so nothing to update here
+        });
+    }
+});
+
+// Tambah animasi slide out
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideOutUp {
+        from {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+    }
+`;
+document.head.appendChild(style);
 </script>
 @endsection
