@@ -42,12 +42,15 @@
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
                         <div class="flex gap-2">
-                            <input type="text" name="place" 
-                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                                   placeholder="e.g., Cilegon" required>
+                            <input type="text" name="place"
+                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="e.g., Cilegon" required
+                                value="{{ session('si_preview_data.place') ?? old('place') }}">
+
                             <input type="date" name="date"
-                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                   required>
+                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                required
+                                value="{{ session('si_preview_data.date') ?? old('date') }}">
                         </div>
                         <p class="text-xs text-gray-500">Document issuance location and date</p>
                     </div>
@@ -59,7 +62,10 @@
                                 required>
                             <option value="">-- Select Vendor --</option>
                             @foreach($vendors as $vendor)
-                                <option value="{{ $vendor->company }}">{{ $vendor->company }}</option>
+                                <option value="{{ $vendor->company }}"
+                                    {{ (session('si_preview_data.to') ?? old('to')) == $vendor->company ? 'selected' : '' }}>
+                                    {{ $vendor->company }}
+                                </option>
                             @endforeach
                         </select>
                         <p class="text-xs text-gray-500">Company or organization name</p>
@@ -81,16 +87,18 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
-                        <input type="text" name="tugbarge" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required>
+                        <input type="text" name="tugbarge"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
+                            value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
                         <p class="text-xs text-gray-500">Vessel name and identification</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Flag State *</label>
-                        <input type="text" name="flag" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., Indonesia" required>
+                        <input type="text" name="flag"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., Indonesia" required
+                            value="{{ session('si_preview_data.flag') ?? old('flag') }}">
                         <p class="text-xs text-gray-500">Country of vessel registration</p>
                     </div>
                 </div>
@@ -110,24 +118,26 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
-                        <input type="text" name="shipper" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., PT Dizamatra Powerindo" required>
+                        <input type="text" name="shipper"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., PT Dizamatra Powerindo" required
+                            value="{{ session('si_preview_data.shipper') ?? old('shipper') }}">
                         <p class="text-xs text-gray-500">Company shipping the goods</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
-                        <input type="text" name="consignee" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., To the order" required>
+                        <input type="text" name="consignee"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., To the order" required
+                            value="{{ session('si_preview_data.consignee') ?? old('consignee') }}">
                         <p class="text-xs text-gray-500">Company receiving the goods</p>
                     </div>
                 </div>
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-gray-700">Notify Address *</label>
                     <textarea name="notify_address" rows="3"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                              placeholder="e.g., PLTU Palton Unit 7-8" required></textarea>
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                              placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
                     <p class="text-xs text-gray-500">Complete address for notifications</p>
                 </div>
             </div>
@@ -146,16 +156,18 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Port of Loading *</label>
-                        <input type="text" name="port_loading" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., Jetty Patratani, Muara Enim, Indonesia" required>
+                        <input type="text" name="port_loading"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., Jetty Patratani, Muara Enim, Indonesia" required
+                            value="{{ session('si_preview_data.port_loading') ?? old('port_loading') }}">
                         <p class="text-xs text-gray-500">Port where cargo will be loaded</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Port of Discharging *</label>
-                        <input type="text" name="port_discharging" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., PLTU Palton Unit 7-8" required>
+                        <input type="text" name="port_discharging"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., PLTU Palton Unit 7-8" required
+                            value="{{ session('si_preview_data.port_discharging') ?? old('port_discharging') }}">
                         <p class="text-xs text-gray-500">Port where cargo will be discharged</p>
                     </div>
                 </div>
@@ -175,16 +187,18 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Commodities *</label>
-                        <input type="text" name="commodities" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., Indonesian Steam Coal in Bulk" required>
+                        <input type="text" name="commodities"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., Indonesian Steam Coal in Bulk" required
+                            value="{{ session('si_preview_data.commodities') ?? old('commodities') }}">
                         <p class="text-xs text-gray-500">Type of goods being shipped</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Quantity *</label>
-                        <input type="text" name="quantity" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" 
-                               placeholder="e.g., 8.500 MT +/- 10%" required>
+                        <input type="text" name="quantity"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., 8.500 MT +/- 10%" required
+                            value="{{ session('si_preview_data.quantity') ?? old('quantity') }}">
                         <p class="text-xs text-gray-500">Amount and measurement unit</p>
                     </div>
                 </div>
@@ -206,12 +220,16 @@
                         <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
                         <div class="flex gap-2">
                             <input type="date" name="laycan_start"
-                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                   required>
+                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                required
+                                value="{{ session('si_preview_data.laycan_start') ?? old('laycan_start') }}">
+
                             <span class="flex items-center px-2">to</span>
+
                             <input type="date" name="laycan_end"
-                                   class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                   required>
+                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                required
+                                value="{{ session('si_preview_data.laycan_end') ?? old('laycan_end') }}">
                         </div>
                         <p class="text-xs text-gray-500">Loading/discharge window period</p>
                     </div>
@@ -236,13 +254,18 @@
                             required>
                         <option value="">-- Select Signatory --</option>
                         @foreach($signatories as $signatory)
-                            <option value="{{ $signatory->name }} - {{ $signatory->position }} {{ $signatory->department->name ?? '' }}" data-position="{{ $signatory->position }}" data-department="{{ $signatory->department->name ?? '' }}">
-                                {{ $signatory->name }} - {{ $signatory->position }} {{ $signatory->department->name ?? '' }}
+                            <option value="{{ $signatory->id }}"
+                                data-position="{{ $signatory->position }}"
+                                data-department="{{ $signatory->department->name ?? '' }}"
+                                {{ (session('si_preview_data.signed_by') ?? old('signed_by')) == $signatory->id ? 'selected' : '' }}>
+                                {{ $signatory->name }}
                             </option>
                         @endforeach
                     </select>
-                    <input type="hidden" name="position" id="signatoryPosition" value="">
-                    <input type="hidden" name="department" id="signatoryDepartment" value="">
+                    <input type="hidden" name="position" id="signatoryPosition"
+                        value="{{ session('si_preview_data.position') ?? old('position') }}">
+                    <input type="hidden" name="department" id="signatoryDepartment"
+                        value="{{ session('si_preview_data.department') ?? old('department') }}">
                 </div>
             </div>
         </div>
@@ -260,6 +283,11 @@
                             class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
                             <i class="fas fa-save mr-2"></i>
                             Save
+                        </button>
+                        <button type="submit" formaction="/shipping-instruction/preview-data"
+                            class="px-8 py-3 bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
+                            <i class="fas fa-eye mr-2"></i>
+                            Preview
                         </button>
                     </div>
                 </div>
@@ -283,6 +311,15 @@
             </svg>
         </button>
     </div>
+@endif
+
+@if(request()->has('from_preview'))
+<script>
+    // Hanya redirect jika user melakukan refresh (bukan saat kembali dari preview)
+    if (performance.navigation.type === 1 && window.location.search.includes('from_preview=1')) {
+        window.location.replace('/shipping-instruction');
+    }
+</script>
 @endif
 
 <style>
@@ -366,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ vendor })
             })
             .then(res => res.json())
-            .then(data => {
+            .then data => {
                 docNumberInput.value = data.document_number;
             });
         }
