@@ -6,7 +6,7 @@
     <style>
         @page {
             size: A4;
-            margin: 1cm 1.6cm 1cm 2cm;
+            margin: 0.5cm 1.6cm 1cm 2cm;
         }
         body {
             font-family: Verdana, Geneva, sans-serif;
@@ -75,11 +75,10 @@
         }
         .fixed-footer {
             position: fixed;
-            left: 0;
-            bottom: -0.5cm; /* Lewati margin bawah 1cm */
+            bottom: -0.3cm; /* Lewati margin bawah 1cm */
             width: 100%;
             color: #223A53;
-            font-size: 11px;
+            font-size: 10px;
             font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
             background: #fff;
             padding: 0;
@@ -90,7 +89,7 @@
         }
         .footer-table td {
             vertical-align: top;
-            padding-right: 20px;
+            /* padding-right: 20px; */ /* Hapus padding agar kolom lebih rapat */
         }
         /* Gambar dekorasi kanan */
         .right-decoration {
@@ -186,18 +185,24 @@
     </div>
 
     <div class="fixed-footer">
-        <table class="footer-table">
+        <table class="footer-table" style="width:auto;">
             <tr>
-                <td style="width:60%;">
-                    <span style="font-weight:bold; color:#223A53;">PT KRAKATAU SAMUDERA SOLUSI</span><br>
-                    <span style="font-weight:bold; color:#223A53;">KRAKATAU INTERNATIONAL PORT AREA / KBS PORT</span><br>
-                    <span style="color:#223A53;">JL. MAYJEND, S. PARMAN KM. 13, KEC. CIWANDAN<br>
-                    KOTA CILEGON, 42445, BANTEN - INDONESIA</span>
+                <td style="font-weight:bold; color:#223A53; vertical-align:top;">
+                    PT KRAKATAU SAMUDERA SOLUSI
                 </td>
-                <td style="width:40%;">
+            </tr>
+            <tr>
+                <td style="vertical-align:top;">
+                    <span style="font-weight:bold; color:#223A53;">KRAKATAU INTERNATIONAL PORT AREA / KBS PORT</span><br>
+                    <span style="color:#555555;">JL. MAYJEND, S. PARMAN KM. 13, KEC. CIWANDAN<br>
+                    KOTA CILEGON, 42445, BANTEN - INDONESIA</span><br>
+                    <span style="font-weight:bold; color:#555555;">P</span> <span style="color:#555555;">+62 254 - 311121 (Hunting)</span>
+                </td>
+                <td style="vertical-align:top; padding-left:5px;">
                     <span style="font-weight:bold; color:#223A53;">JAKARTA OFFICE</span><br>
-                    <span style="color:#223A53;">KRAKATAU STEEL BUILDING 9<sup>TH</sup> FLOOR<br>
-                    JL. JEND, GATOT SUBROTO KAV. 54, JAKARTA SELATAN, 12950 - INDONESIA</span>
+                    <span style="color:#555555;">KRAKATAU STEEL BUILDING 9<sup>th</sup> FLOOR<br>
+                    JL. JEND, GATOT SUBROTO KAV. 54, JAKARTA SELATAN, 12950 - INDONESIA</span><br>
+                    <span style="font-weight:bold; color:#555555;">P</span> <span style="color:#555555;">+62 21 - 5221249 (Hunting)</span>
                 </td>
             </tr>
         </table>

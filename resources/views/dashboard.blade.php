@@ -57,28 +57,13 @@
         <p class="text-sm text-gray-500 mt-1">Latest shipping instruction documents created</p>
     </div>
     <div class="p-6">
-        @php
-            $colors = [
-                'bg-blue-100 text-blue-500',
-                'bg-green-100 text-green-500',
-                'bg-yellow-100 text-yellow-500',
-                'bg-purple-100 text-purple-500',
-                'bg-pink-100 text-pink-500',
-                'bg-red-100 text-red-500',
-                'bg-indigo-100 text-indigo-500',
-                'bg-teal-100 text-teal-500',
-                'bg-orange-100 text-orange-500',
-            ];
-        @endphp
+        {{-- Hapus kode warna random --}}
         <div class="space-y-4">
             @forelse($recentDocuments as $doc)
-            @php
-                $color = $colors[array_rand($colors)];
-            @endphp
             <div class="flex items-center justify-between py-3 border-b border-gray-100">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 {{ explode(' ', $color)[0] }} rounded-lg flex items-center justify-center mr-4">
-                        <i class="fas fa-file-alt {{ explode(' ', $color)[1] }}"></i>
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-file-alt text-blue-500"></i>
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-800">{{ $doc->number }}</p>

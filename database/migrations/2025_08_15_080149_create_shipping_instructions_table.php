@@ -29,8 +29,6 @@ return new class extends Migration
             $table->string('place');
             $table->date('date');
             $table->string('signed_by');
-            $table->string('position');
-            $table->string('department')->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
         });
