@@ -284,3 +284,8 @@ Route::get('/shipping-instruction-preview/download', function () {
 
     return $pdf->download('shipping-instruction.pdf');
 });
+
+Route::get('/shipping-instruction-overview', function () {
+    $shippingInstructions = \App\Models\ShippingInstruction::orderBy('created_at', 'desc')->paginate(20);
+    return view('shipping.shipping-instruction-overview', compact('shippingInstructions'));
+})->name('shipping-instruction.overview');

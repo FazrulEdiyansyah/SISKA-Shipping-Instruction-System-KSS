@@ -35,6 +35,11 @@
                     <span class="font-medium text-sm">Shipping Instruction</span>
                 </a>
                 
+                <a href="/shipping-instruction-overview" class="flex items-center px-4 py-2.5 {{ request()->is('shipping-instruction-overview*') ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
+                    <i class="fas fa-table w-4 h-4 mr-2"></i>
+                    <span class="font-medium text-sm">SI Overview</span>
+                </a>
+                
                 <a href="/ship-vendor-management" class="flex items-center px-4 py-2.5 {{ request()->is('ship-vendor-management*') ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
                     <i class="fas fa-anchor w-4 h-4 mr-2"></i>
                     <span class="font-medium text-sm">Ship Vendor Management</span>
@@ -67,13 +72,6 @@
                         <p class="text-sm text-gray-600">@yield('page-subtitle', 'Today | September 20')</p>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <div class="relative">
-                            <input type="text" placeholder="Search here..." class="bg-gray-100 rounded-lg px-3 py-1.5 pl-8 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search absolute left-2.5 top-2 text-gray-400 text-sm"></i>
-                        </div>
-                        <button class="p-1.5 text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-bell text-sm"></i>
-                        </button>
                         <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center">
                             <i class="fas fa-user text-white text-xs"></i>
                         </div>
