@@ -267,15 +267,15 @@
                             <option value="{{ $signatory->id }}"
                                 data-position="{{ $signatory->position }}"
                                 data-department="{{ $signatory->department->name ?? '' }}"
-                                {{ (old('signed_by', $si->signatory_id ?? null) == $signatory->id) ? 'selected' : '' }}>
+                                {{ (old('signed_by', $si->signatory_id ?? $si->signed_by) == $signatory->id) ? 'selected' : '' }}>
                                 {{ $signatory->name }}
                             </option>
                         @endforeach
                     </select>
                     <input type="hidden" name="position" id="signatoryPosition"
-                        value="{{ $si->position }}">
+                        value="{{ old('position', $si->position) }}">
                     <input type="hidden" name="department" id="signatoryDepartment"
-                        value="{{ $si->department }}">
+                        value="{{ old('department', $si->department) }}">
                 </div>
             </div>
         </div>
