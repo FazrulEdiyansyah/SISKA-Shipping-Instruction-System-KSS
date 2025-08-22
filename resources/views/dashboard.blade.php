@@ -71,8 +71,9 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                        Completed
+                    <span class="inline-block px-2 py-1 rounded text-xs font-semibold
+                        {{ $doc->completed_at ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                        {{ $doc->completed_at ? 'Completed' : 'Only SI' }}
                     </span>
                     <p class="text-xs text-gray-400 mt-1">{{ $doc->created_at->diffForHumans() }}</p>
                 </div>

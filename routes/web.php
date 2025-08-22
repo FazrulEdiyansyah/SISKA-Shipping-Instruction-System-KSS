@@ -89,8 +89,6 @@ Route::post('/shipping-instruction/save', function (Illuminate\Http\Request $req
         'place' => $request->place,
         'date' => $request->date,
         'signed_by' => $signatory ? $signatory->name : '',
-        'position' => $signatory ? $signatory->position : '',
-        'department' => $signatory && $signatory->department ? $signatory->department->name : '',
         'remarks' => 'Freight Payable as Per Charter Party (SPAL)',
     ]);
 
@@ -132,6 +130,49 @@ Route::get('/shipping-instruction-preview', function () {
 
     return view('shipping.shipping-instruction-preview', compact('data'));
 });
+
+Route::get('/shipping-instruction-preview/{id}', function ($id) {
+    $si = \App\Models\ShippingInstruction::findOrFail($id);
+    $vendors = \App\Models\Vendor::all();
+    $signatories = \App\Models\Signatory::with('department')->get();
+
+    // Siapkan data array untuk detail
+    $data = [
+        'number' => $si->number,
+        'to' => $si->to,
+        'tugbarge' => $si->tugbarge,
+        'flag' => $si->flag,
+        'shipper' => $si->shipper,
+        'consignee' => $si->consignee,
+        'notify_address' => $si->notify_address,
+        'port_loading' => $si->port_loading,
+        'port_discharging' => $si->port_discharging,
+        'commodities' => $si->commodities,
+        'quantity' => $si->quantity,
+        'laycan_start' => $si->laycan_start,
+        'laycan_end' => $si->laycan_end,
+        'laycan' => $si->laycan_start && $si->laycan_end
+            ? (\Carbon\Carbon::parse($si->laycan_start)->format('d F Y') . ' - ' . \Carbon\Carbon::parse($si->laycan_end)->format('d F Y'))
+            : '-',
+        'place_date' => $si->place . ', ' . (\Carbon\Carbon::parse($si->date)->format('d F Y')),
+        'spal_number' => $si->spal_number,
+        'spal_document' => $si->spal_document,
+        'signed_by' => $si->signed_by,
+        'position' => $si->position,
+        'department' => $si->department,
+    ];
+
+    // --- Tambahkan blok ini ---
+    if (!empty($si->signed_by) && is_numeric($si->signed_by)) {
+        $signatory = \App\Models\Signatory::with('department')->find($si->signed_by);
+        $data['signed_by'] = $signatory ? $signatory->name : '-';
+        $data['position'] = $signatory ? $signatory->position : '-';
+        $data['department'] = $signatory && $signatory->department ? $signatory->department->name : '-';
+    }
+    // --------------------------
+
+    return view('shipping.shipping-instruction-detail', compact('si', 'vendors', 'signatories', 'data'));
+})->name('shipping-instruction.detail');
 
 Route::get('/shipping-instruction/preview-pdf', function () {
     $data = session('si_preview_data');
@@ -286,6 +327,109 @@ Route::get('/shipping-instruction-preview/download', function () {
 });
 
 Route::get('/shipping-instruction-overview', function () {
-    $shippingInstructions = \App\Models\ShippingInstruction::orderBy('created_at', 'desc')->paginate(20);
+    $shippingInstructions = \App\Models\ShippingInstruction::orderBy('created_at', 'desc')->paginate(10);
     return view('shipping.shipping-instruction-overview', compact('shippingInstructions'));
 })->name('shipping-instruction.overview');
+
+// Edit routes
+Route::get('/shipping-instruction-edit/{id}', [App\Http\Controllers\ShippingInstructionEditController::class, 'edit'])
+    ->name('shipping-instruction.edit');
+
+Route::put('/shipping-instruction-update/{id}', [App\Http\Controllers\ShippingInstructionEditController::class, 'update'])
+    ->name('shipping-instruction.update');
+
+// Detail route (pastikan ada)
+Route::get('/shipping-instruction-preview/{id}', function($id) {
+    $si = \App\Models\ShippingInstruction::findOrFail($id);
+    $vendors = \App\Models\Vendor::all();
+    $signatories = \App\Models\Signatory::with('department')->get();
+
+    // Siapkan data array untuk detail
+    $data = [
+        'number' => $si->number,
+        'to' => $si->to,
+        'tugbarge' => $si->tugbarge,
+        'flag' => $si->flag,
+        'shipper' => $si->shipper,
+        'consignee' => $si->consignee,
+        'notify_address' => $si->notify_address,
+        'port_loading' => $si->port_loading,
+        'port_discharging' => $si->port_discharging,
+        'commodities' => $si->commodities,
+        'quantity' => $si->quantity,
+        'laycan_start' => $si->laycan_start,
+        'laycan_end' => $si->laycan_end,
+        'laycan' => $si->laycan_start && $si->laycan_end
+            ? (\Carbon\Carbon::parse($si->laycan_start)->format('d F Y') . ' - ' . \Carbon\Carbon::parse($si->laycan_end)->format('d F Y'))
+            : '-',
+        'place_date' => $si->place . ', ' . (\Carbon\Carbon::parse($si->date)->format('d F Y')),
+        'spal_number' => $si->spal_number,
+        'spal_document' => $si->spal_document,
+        'signed_by' => $si->signed_by,
+        'position' => $si->position,
+        'department' => $si->department,
+    ];
+
+    // --- Tambahkan blok ini ---
+    if (!empty($si->signed_by) && is_numeric($si->signed_by)) {
+        $signatory = \App\Models\Signatory::with('department')->find($si->signed_by);
+        $data['signed_by'] = $signatory ? $signatory->name : '-';
+        $data['position'] = $signatory ? $signatory->position : '-';
+        $data['department'] = $signatory && $signatory->department ? $signatory->department->name : '-';
+    }
+    // --------------------------
+
+    return view('shipping.shipping-instruction-detail', compact('si', 'vendors', 'signatories', 'data'));
+})->name('shipping-instruction.detail');
+
+Route::post('/shipping-instruction/update/{id}', function (Illuminate\Http\Request $request, $id) {
+    $si = \App\Models\ShippingInstruction::findOrFail($id);
+
+    // Update field utama SI
+    $si->to = $request->to;
+    $si->tugbarge = $request->tugbarge;
+    $si->flag = $request->flag;
+    $si->shipper = $request->shipper;
+    $si->consignee = $request->consignee;
+    $si->notify_address = $request->notify_address;
+    $si->port_loading = $request->port_loading;
+    $si->port_discharging = $request->port_discharging;
+    $si->commodities = $request->commodities;
+    $si->quantity = $request->quantity;
+    $si->laycan_start = $request->laycan_start;
+    $si->laycan_end = $request->laycan_end;
+    $si->place = $request->place;
+    $si->date = $request->date;
+    $si->remarks = $request->remarks;
+    if ($request->signed_by) {
+        $signatory = \App\Models\Signatory::with('department')->find($request->signed_by);
+        $si->signed_by = $signatory ? $signatory->name : '';
+    }
+
+    // Update SPAL
+    $si->spal_number = $request->spal_number;
+
+    // Handle file upload SPAL
+    if ($request->hasFile('spal_document')) {
+        // Hapus file lama jika ada
+        if ($si->spal_document && \Storage::disk('public')->exists('spal_documents/' . $si->spal_document)) {
+            \Storage::disk('public')->delete('spal_documents/' . $si->spal_document);
+        }
+        // Simpan file baru ke public/storage/spal_documents
+        $file = $request->file('spal_document');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('spal_documents', $fileName, 'public');
+        $si->spal_document = $fileName;
+    }
+
+    // Status completed jika SPAL lengkap
+    if ($si->spal_number && $si->spal_document) {
+        $si->completed_at = now();
+    } else {
+        $si->completed_at = null;
+    }
+
+    $si->save();
+
+    return redirect()->back()->with('success', 'Shipping Instruction updated successfully!');
+});
