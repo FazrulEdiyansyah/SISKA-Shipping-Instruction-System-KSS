@@ -180,7 +180,7 @@
     <p style="font-weight:bold; margin-top:-8px; margin-bottom:0; line-height:1;">PT KRAKATAU SAMUDERA SOLUSI</p>
     <br><br><br>
     <div class="signature-block">
-        <p class="signature-name">{{ $signed_by ?? '-' }}</p>
+        <p class="signature-name">{{ $signed_by_name ?? '-' }}</p>
         <p class="signature-pos">{{ $position ?? '-' }} {{ $department ?? '-' }}</p>
     </div>
 
@@ -193,15 +193,15 @@
             </tr>
             <tr>
                 <td style="vertical-align:top;">
-                    <span style="font-weight:bold; color:#223A53;">KRAKATAU INTERNATIONAL PORT AREA / KBS PORT</span><br>
-                    <span style="color:#555555;">JL. MAYJEND, S. PARMAN KM. 13, KEC. CIWANDAN<br>
-                    KOTA CILEGON, 42445, BANTEN - INDONESIA</span><br>
+                    <span style="font-weight:bold; color:#223A53;">Krakatau International Port Area / KBS Port</span><br>
+                    <span style="color:#555555;">Jl. Mayjend, S. Parman km. 13, Kec. Ciwandan<br>
+                    Kota Cilegon, 42445, Banten - Indonesia</span><br>
                     <span style="font-weight:bold; color:#555555;">P</span> <span style="color:#555555;">+62 254 - 311121 (Hunting)</span>
                 </td>
-                <td style="vertical-align:top; padding-left:5px;">
-                    <span style="font-weight:bold; color:#223A53;">JAKARTA OFFICE</span><br>
-                    <span style="color:#555555;">KRAKATAU STEEL BUILDING 9<sup>th</sup> FLOOR<br>
-                    JL. JEND, GATOT SUBROTO KAV. 54, JAKARTA SELATAN, 12950 - INDONESIA</span><br>
+                <td style="vertical-align:top; padding-left:50px;">
+                    <span style="font-weight:bold; color:#223A53;">Jakarta Office</span><br>
+                    <span style="color:#555555;">Krakatau Steel Building 9<sup>th</sup> Floor<br>
+                    Jl. Jend, Gatot Subroto Kav. 54, Jakarta Selatan, 12950 - Indonesia</span><br>
                     <span style="font-weight:bold; color:#555555;">P</span> <span style="color:#555555;">+62 21 - 5221249 (Hunting)</span>
                 </td>
             </tr>

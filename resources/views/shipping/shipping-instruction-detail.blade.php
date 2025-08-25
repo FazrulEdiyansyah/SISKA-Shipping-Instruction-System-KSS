@@ -216,8 +216,17 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-500 mb-2">SPAL Document</label>
-                            <div class="bg-gray-50 p-3 rounded-lg border">
-                                <p class="text-gray-900">{{ $data['spal_document'] ?? '-' }}</p>
+                            <div class="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
+                                <p class="text-gray-900 mb-0">
+                                    {{ $data['spal_document'] ?? '-' }}
+                                </p>
+                                @if(!empty($data['spal_document']))
+                                    <a href="{{ asset('storage/spal_documents/' . $data['spal_document']) }}" 
+                                       class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
+                                       download="SPAL-{{ $data['spal_number'] ?? 'document' }}.pdf">
+                                    <i class="fas fa-download mr-1"></i> Download
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -238,18 +247,6 @@
                             <label class="block text-sm font-medium text-gray-500 mb-2">Signed By</label>
                             <div class="bg-gray-50 p-3 rounded-lg border">
                                 <p class="text-gray-900 font-semibold">{{ $data['signed_by'] ?? '-' }}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-500 mb-2">Position</label>
-                            <div class="bg-gray-50 p-3 rounded-lg border">
-                                <p class="text-gray-900">{{ $data['position'] ?? '-' }}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-500 mb-2">Department</label>
-                            <div class="bg-gray-50 p-3 rounded-lg border">
-                                <p class="text-gray-900">{{ $data['department'] ?? '-' }}</p>
                             </div>
                         </div>
                     </div>
@@ -290,22 +287,6 @@
                             </span>
                         @endif
                     </div>
-                    @if($si->spal_number)
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-500">SPAL Number:</span>
-                        <span class="text-gray-900 font-medium">{{ $si->spal_number }}</span>
-                    </div>
-                    @endif
-                    @if($si->spal_document)
-                    <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-500">SPAL Document:</span>
-                        <a href="{{ asset('storage/spal_documents/' . $si->spal_document) }}" target="_blank" 
-                           class="text-blue-600 hover:text-blue-800 text-xs font-medium">
-                            <i class="fas fa-file-pdf mr-1"></i>
-                            View SPAL
-                        </a>
-                    </div>
-                    @endif
                 </div>
             </div>
 
@@ -318,7 +299,7 @@
                     </h4>
                 </div>
                 <div class="p-4 space-y-3">
-                    <a href="{{ url('/shipping-instruction/preview-pdf') }}" 
+                    <a href="{{ url('/shipping-instruction/'.$si->id.'/pdf') }}" 
                        target="_blank"
                        class="w-full inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition duration-200 shadow-sm">
                         <i class="fas fa-file-pdf mr-2"></i>
@@ -384,76 +365,61 @@
 @endif
 
 <style>
-/* Custom animations */
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
+/* Hapus animasi slideInRight dan slideOutRight pada notifikasi */
 #successAlert {
-    animation: slideInRight 0.3s ease-out;
+    /* animation: slideInRight 0.3s ease-out; */
 }
 
-/* Sticky sidebar styles */
+/* Hapus animasi hover pada .bg-white */
+.bg-white:hover {
+    /* transform: translateY(-1px); */
+    /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); */
+    /* transition: all 0.3s ease; */
+}
+
+/* Sticky sidebar styles tetap */
 .sticky-sidebar-item {
     position: sticky;
-    top: 1.5rem; /* 24px gap from top */
+    top: 1.5rem;
     z-index: 10;
 }
 
-/* Hover effects */
-.bg-white:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-/* Responsive adjustments */
+/* Responsive adjustments dan modal tetap */
 @media (max-width: 768px) {
     .grid-cols-1.md\\:grid-cols-2 {
         grid-template-columns: 1fr;
     }
-    
     .lg\\:col-span-4 {
         grid-column: span 1;
     }
-    
-    /* Disable sticky on mobile for better UX */
     .sticky-sidebar-item {
         position: static;
     }
 }
-
-/* Large screens - better spacing for sticky elements */
 @media (min-width: 1024px) {
     .sticky-sidebar-item:first-child {
         top: 1.5rem;
     }
-    
     .sticky-sidebar-item:last-child {
-        top: calc(1.5rem + 220px); /* Adjust based on first item height */
+        top: calc(1.5rem + 220px);
     }
 }
 </style>
 
 <script>
+// Hapus animasi slideOutRight pada closeAlert
 function closeAlert() {
     const alert = document.getElementById('successAlert');
     if (alert) {
-        alert.style.animation = 'slideOutRight 0.3s ease-in forwards';
-        setTimeout(() => {
-            alert.remove();
-        }, 300);
+        // alert.style.animation = 'slideOutRight 0.3s ease-in forwards';
+        // setTimeout(() => {
+        //     alert.remove();
+        // }, 300);
+        alert.remove();
     }
 }
 
-// Auto close notification after 5 seconds
+// Auto close notification setelah 5 detik tetap ada
 document.addEventListener('DOMContentLoaded', function() {
     const successAlert = document.getElementById('successAlert');
     if (successAlert) {
@@ -462,22 +428,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 });
-
-// Add slideOutRight animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideOutRight {
-        from {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(20px);
-        }
-    }
-`;
-document.head.appendChild(style);
 
 function confirmDelete(id) {
     const modal = document.getElementById('deleteModal');

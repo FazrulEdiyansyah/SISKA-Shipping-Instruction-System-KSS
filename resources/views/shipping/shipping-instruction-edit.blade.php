@@ -33,7 +33,7 @@
                     <!-- Document Number (Read Only) -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Document Number</label>
-                        <input type="text" value="{{ $si->number }}" readonly
+                        <input type="text" id="docNumberInput" name="number" value="{{ $si->number }}" readonly
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
                     </div>
                     
@@ -267,7 +267,7 @@
                             <option value="{{ $signatory->id }}"
                                 data-position="{{ $signatory->position }}"
                                 data-department="{{ $signatory->department->name ?? '' }}"
-                                {{ (old('signed_by', $si->signatory_id ?? $si->signed_by) == $signatory->id) ? 'selected' : '' }}>
+                                {{ (old('signed_by', $si->signed_by) == $signatory->id) ? 'selected' : '' }}>
                                 {{ $signatory->name }}
                             </option>
                         @endforeach
@@ -303,12 +303,42 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const signatorySelect = document.getElementById('signatorySelect');
-    
-    if(signatorySelect) {
-        signatorySelect.addEventListener('change', function() {
-            const selected = signatorySelect.options[signatorySelect.selectedIndex];
-            // Position dan department sudah di-handle di backend
+    const vendorInput = document.querySelector('select[name="to"]');
+    const docNumberInput = document.getElementById('docNumberInput');
+    if (vendorInput && docNumberInput) {
+        vendorInput.addEventListener('change', function() {
+            const vendor = vendorInput.value;
+            if (vendor.length > 0) {
+                // Ambil nomor SI lama
+                const oldNumber = docNumberInput.value;
+                // Ambil 3 digit urut, bulan, tahun dari nomor lama
+                const match = oldNumber.match(/^(\d{3})\/SI\/KSS-[^\/]+\/([IVXLCDM]+)\/(\d{4})$/);
+                if (match) {
+                    const urut = match[1];
+                    const bulan = match[2];
+                    const tahun = match[3];
+                    // Hitung inisial vendor baru
+                    fetch('/shipping-instruction/generate-number', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ vendor })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Ambil inisial dari hasil endpoint
+                        const docNum = data.document_number;
+                        const inisialMatch = docNum.match(/^(\d{3})\/SI\/KSS-([^\/]+)\/([IVXLCDM]+)\/(\d{4})$/);
+                        if (inisialMatch) {
+                            const inisial = inisialMatch[2];
+                            // Gabungkan urut lama + inisial baru + bulan & tahun lama
+                            docNumberInput.value = `${urut}/SI/KSS-${inisial}/${bulan}/${tahun}`;
+                        }
+                    });
+                }
+            }
         });
     }
 });

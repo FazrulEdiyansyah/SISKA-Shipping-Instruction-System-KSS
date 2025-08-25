@@ -22,7 +22,7 @@ class ShippingInstructionEditController extends Controller
     public function update(Request $request, $id)
     {
         $si = ShippingInstruction::findOrFail($id);
-        
+
         // Validasi
         $request->validate([
             'to' => 'required|string',
@@ -44,31 +44,44 @@ class ShippingInstructionEditController extends Controller
             'spal_document' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
-        // Ambil signatory berdasarkan ID
-        $signatory = Signatory::with('department')->find($request->signed_by);
-        
+        // Cek apakah vendor berubah
+        $vendorChanged = $request->to !== $si->to;
+
+        // Ambil inisial vendor baru
+        $vendor = \App\Models\Vendor::where('company', $request->to)->first();
+        $initials = $vendor ? $vendor->initials : 'XXX';
+
+        // Jika vendor berubah, update nomor SI dengan inisial baru, urutan tetap
+        $newNumber = $si->number;
+        if ($vendorChanged) {
+            if (preg_match('/^(\d{3})\/SI\/KSS-[^\/]+\/([IVXLCDM]+)\/(\d{4})$/', $si->number, $matches)) {
+                $urut = $matches[1];
+                $bulan = $matches[2];
+                $tahun = $matches[3];
+                $newNumber = "{$urut}/SI/KSS-{$initials}/{$bulan}/{$tahun}";
+            }
+        }
+
         // Handle SPAL document upload
-        $spalDocument = $si->spal_document; // Keep existing if no new upload
+        $spalDocument = $si->spal_document;
         if ($request->hasFile('spal_document')) {
-            // Delete old file if exists
             if ($si->spal_document && Storage::exists('public/spal_documents/' . $si->spal_document)) {
                 Storage::delete('public/spal_documents/' . $si->spal_document);
             }
-            
-            // Store new file
             $file = $request->file('spal_document');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->storeAs('public/spal_documents', $fileName);
             $spalDocument = $fileName;
         }
-        
+
         // Determine completed_at based on SPAL data
         $completedAt = null;
         if ($request->spal_number && $spalDocument) {
             $completedAt = now();
         }
-        
+
         $si->update([
+            'number' => $newNumber, // update nomor SI jika vendor berubah
             'to' => $request->to,
             'tugbarge' => $request->tugbarge,
             'flag' => $request->flag,
@@ -83,10 +96,8 @@ class ShippingInstructionEditController extends Controller
             'laycan_end' => $request->laycan_end,
             'place' => $request->place,
             'date' => $request->date,
-            'signed_by' => $signatory ? $signatory->name : '',
-            'position' => $signatory ? $signatory->position : '',
-            'department' => $signatory && $signatory->department ? $signatory->department->name : '',
-            'remarks' => $request->remarks,
+            'signed_by' => $request->signed_by,
+            'remarks' => 'Freight Payable as Per Charter Party (SPAL)', // Set otomatis
             'spal_number' => $request->spal_number,
             'spal_document' => $spalDocument,
             'completed_at' => $completedAt,
