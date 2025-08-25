@@ -7,6 +7,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\SignatoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ShippingInstructionController;
+use App\Http\Controllers\ReportController;
 use App\Models\ShippingInstruction;
 use App\Models\Vendor;
 
@@ -122,3 +123,9 @@ Route::get('/shipping-instruction/{id}/pdf', function ($id) {
     $pdf = Pdf::loadView('shipping.shipping-instruction-pdf', $data);
     return $pdf->stream('shipping-instruction.pdf');
 });
+
+Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+Route::post('/report/show', [ReportController::class, 'show'])->name('report.show');
+Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
+Route::get('/report/columns', [ReportController::class, 'getAvailableColumns'])->name('report.columns');
+Route::get('/report/preview-pdf', [ReportController::class, 'previewPdf'])->name('report.preview-pdf');

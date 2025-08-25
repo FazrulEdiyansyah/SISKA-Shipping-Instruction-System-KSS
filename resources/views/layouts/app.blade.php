@@ -40,6 +40,7 @@
                     <span class="font-medium text-sm">SI Overview</span>
                 </a>
                 
+                
                 <a href="/ship-vendor-management" class="flex items-center px-4 py-2.5 {{ request()->is('ship-vendor-management*') ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
                     <i class="fas fa-anchor w-4 h-4 mr-2"></i>
                     <span class="font-medium text-sm">Ship Vendor Management</span>
@@ -50,7 +51,7 @@
                     <span class="font-medium text-sm">Approval Management</span>
                 </a>
                 
-                <a href="#" class="flex items-center px-4 py-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50">
+                <a href="{{ route('report.index') }}" class="flex items-center px-4 py-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50">
                     <i class="fas fa-chart-bar w-4 h-4 mr-2"></i>
                     <span class="font-medium text-sm">Reports</span>
                 </a>
