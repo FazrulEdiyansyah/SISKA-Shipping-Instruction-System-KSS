@@ -46,7 +46,6 @@
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 placeholder="e.g., Cilegon" required
                                 value="{{ session('si_preview_data.place') ?? old('place') }}">
-
                             <input type="date" name="date"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 required
@@ -54,12 +53,13 @@
                         </div>
                         <p class="text-xs text-gray-500">Document issuance location and date</p>
                     </div>
+
                     <!-- Addressed To -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Addressed To *</label>
                         <select name="to" id="vendorInput"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                required>
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required>
                             <option value="">-- Select Vendor --</option>
                             @foreach($vendors as $vendor)
                                 <option value="{{ $vendor->company }}"
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Vessel Information Section -->
         <div class="bg-white rounded-xl shadow-sm">
             <div class="p-6 border-b border-gray-200">
@@ -85,14 +85,44 @@
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
-                        <input type="text" name="tugbarge"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
-                            value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
-                        <p class="text-xs text-gray-500">Vessel name and identification</p>
+                    <div class="space-y-4">
+                        <!-- Field khusus untuk Bunga Teratai -->
+                        <div id="bungaTerataiFields" style="display:none;">
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700">Vessel Name *</label>
+                                    <input type="text" name="vessel_name"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Vessel Name"
+                                        value="{{ session('si_preview_data.vessel_name') ?? old('vessel_name') }}">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700">Vessel Arrived *</label>
+                                    <div class="flex gap-2">
+                                        <input type="date" name="vessel_arrived"
+                                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            value="{{ session('si_preview_data.vessel_arrived') ?? old('vessel_arrived') }}">
+                                        <input type="text" name="vessel_arrived_note"
+                                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Keterangan/Note (optional)"
+                                            value="{{ session('si_preview_data.vessel_arrived_note') ?? old('vessel_arrived_note') }}">
+                                    </div>
+                                    <p class="text-xs text-gray-500">Tanggal wajib diisi, keterangan opsional</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tugboat/Barge -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
+                            <input type="text" name="tugbarge"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
+                                value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
+                            <p class="text-xs text-gray-500">Vessel name and identification</p>
+                        </div>
                     </div>
+
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Flag State *</label>
                         <input type="text" name="flag"
@@ -134,7 +164,7 @@
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-gray-700">Notify Address *</label>
+                    <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">Notify Address *</label>
                     <textarea name="notify_address" rows="3"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                               placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
@@ -223,9 +253,7 @@
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 required
                                 value="{{ session('si_preview_data.laycan_start') ?? old('laycan_start') }}">
-
                             <span class="flex items-center px-2">to</span>
-
                             <input type="date" name="laycan_end"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 required
@@ -383,6 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const signatorySelect = document.getElementById('signatorySelect');
     const signatoryPosition = document.getElementById('signatoryPosition');
     const signatoryDepartment = document.getElementById('signatoryDepartment');
+    
     if(signatorySelect) {
         signatorySelect.addEventListener('change', function() {
             const selected = signatorySelect.options[signatorySelect.selectedIndex];
@@ -403,7 +432,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ vendor })
             })
             .then(res => res.json())
-            .then data => {
+            .then(data => {
                 docNumberInput.value = data.document_number;
             });
         }
@@ -432,5 +461,26 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const vendorInput = document.getElementById('vendorInput');
+    const bungaTerataiFields = document.getElementById('bungaTerataiFields');
+    const notifyLabel = document.getElementById('notifyLabel');
+    
+    function toggleBungaTerataiFields() {
+        if (vendorInput.value === 'PT Bunga Teratai') {
+            bungaTerataiFields.style.display = '';
+            notifyLabel.textContent = 'Notify Party *';
+        } else {
+            bungaTerataiFields.style.display = 'none';
+            notifyLabel.textContent = 'Notify Address *';
+        }
+    }
+    
+    vendorInput.addEventListener('change', toggleBungaTerataiFields);
+    toggleBungaTerataiFields(); // initial load
+});
 </script>
 @endsection

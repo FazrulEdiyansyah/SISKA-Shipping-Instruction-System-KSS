@@ -12,11 +12,8 @@
         <!-- Sidebar -->
         <aside class="w-56 bg-white shadow-lg flex-shrink-0">
             <div class="p-4">
-                <div class="flex items-center">
-                    <div class="w-7 h-7 bg-blue-500 rounded-lg flex items-center justify-center mr-2">
-                        <i class="fas fa-ship text-white text-sm"></i>
-                    </div>
-                    <h1 class="text-lg font-bold text-gray-800">SISKA</h1>
+                <div class="flex items-center justify-center">
+                    <img src="{{ asset('LogoSISKA.png') }}" alt="SISKA Logo" class="w-30 h-30 object-contain">
                 </div>
             </div>
             
@@ -51,14 +48,9 @@
                     <span class="font-medium text-sm">Approval Management</span>
                 </a>
                 
-                <a href="{{ route('report.index') }}" class="flex items-center px-4 py-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50">
+                <a href="{{ route('report.index') }}" class="flex items-center px-4 py-2.5 {{ request()->is('report*') ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
                     <i class="fas fa-chart-bar w-4 h-4 mr-2"></i>
                     <span class="font-medium text-sm">Reports</span>
-                </a>
-                
-                <a href="#" class="flex items-center px-4 py-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50">
-                    <i class="fas fa-cog w-4 h-4 mr-2"></i>
-                    <span class="font-medium text-sm">Settings</span>
                 </a>
             </nav>
         </aside>
@@ -69,8 +61,8 @@
             <header class="bg-white shadow-sm border-b flex-shrink-0">
                 <div class="flex items-center justify-between px-6 py-3">
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">@yield('page-title', 'Dashboard')</h2>
-                        <p class="text-sm text-gray-600">@yield('page-subtitle', 'Today | September 20')</p>
+                        <h2 class="text-xl font-bold text-gray-800">PT Krakatau Samudera Solusi</h2>
+                        <p class="text-sm text-gray-600">{{ now()->format('l, d F Y') }}</p>
                     </div>
                     <div class="flex items-center space-x-3">
                         <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center">

@@ -13,11 +13,12 @@ use App\Models\Vendor;
 
 Route::get('/', function () {
     $totalShippingInstructions = ShippingInstruction::count();
+    $completedShippingInstructions = ShippingInstruction::whereNotNull('completed_at')->count();
     $totalVendors = Vendor::count();
     $totalSignatories = \App\Models\Signatory::count();
     $recentDocuments = ShippingInstruction::orderBy('created_at', 'desc')->take(5)->get();
 
-    return view('dashboard', compact('totalShippingInstructions', 'totalVendors', 'totalSignatories', 'recentDocuments'));
+    return view('dashboard', compact('totalShippingInstructions', 'completedShippingInstructions', 'totalVendors', 'totalSignatories', 'recentDocuments'));
 });
 
 Route::get('/shipping-instruction', function () {
@@ -43,8 +44,11 @@ Route::post('/shipping-instruction/generate-number', function(Request $request) 
     return response()->json(['number' => $number]);
 });
 
-Route::get('/ship-vendor-management', [VendorController::class, 'index'])->name('vendor.index');
-Route::post('/ship-vendor-management', [VendorController::class, 'store'])->name('vendor.store');
+Route::get('/ship-vendor-management', [App\Http\Controllers\VendorController::class, 'index'])->name('vendor.index');
+Route::post('/ship-vendor-management', [App\Http\Controllers\VendorController::class, 'store'])->name('vendor.store');
+Route::get('/ship-vendor-management/{id}/edit', [App\Http\Controllers\VendorController::class, 'edit']);
+Route::put('/ship-vendor-management/{id}', [App\Http\Controllers\VendorController::class, 'update']);
+Route::delete('/ship-vendor-management/{id}', [App\Http\Controllers\VendorController::class, 'destroy']);
 
 Route::post('/signatories', [SignatoryController::class, 'store'])->name('signatories.store');
 Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
@@ -111,10 +115,7 @@ Route::delete('/shipping-instruction-delete/{id}', function ($id) {
     return redirect('/shipping-instruction-overview')->with('success', 'Shipping Instruction deleted!');
 });
 
-Route::get('/shipping-instruction-overview', function () {
-    $shippingInstructions = \App\Models\ShippingInstruction::orderBy('created_at', 'desc')->paginate(10);
-    return view('shipping.shipping-instruction-overview', compact('shippingInstructions'));
-});
+Route::get('/shipping-instruction-overview', [ShippingInstructionController::class, 'index']);
 
 // Tambahkan route ini
 Route::get('/shipping-instruction/{id}/pdf', function ($id) {
@@ -129,3 +130,11 @@ Route::post('/report/show', [ReportController::class, 'show'])->name('report.sho
 Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
 Route::get('/report/columns', [ReportController::class, 'getAvailableColumns'])->name('report.columns');
 Route::get('/report/preview-pdf', [ReportController::class, 'previewPdf'])->name('report.preview-pdf');
+
+// Signatory routes - edit, update, delete
+Route::get('/signatories/{id}/edit', [SignatoryController::class, 'edit']);
+Route::put('/signatories/{id}', [SignatoryController::class, 'update']);
+Route::delete('/signatories/{id}', [SignatoryController::class, 'destroy']);
+
+// Department routes - delete only (sesuai permintaan)
+Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);

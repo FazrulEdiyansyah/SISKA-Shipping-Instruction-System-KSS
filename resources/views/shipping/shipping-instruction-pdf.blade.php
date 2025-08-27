@@ -128,6 +128,26 @@
     </p>
 
     <table class="main-table">
+        @if($to === 'PT Bunga Teratai')
+        <tr>
+            <td class="label">Vessel Name</td>
+            <td>: {{ $vessel_name ?? '-' }}</td>
+        </tr>
+        <tr>
+            <td class="label">Vessel Arrived</td>
+            <td>
+                : 
+                @if(!empty($vessel_arrived))
+                    {{ \Carbon\Carbon::parse($vessel_arrived)->format('d F Y') }}
+                    @if(!empty($vessel_arrived_note))
+                        {{ $vessel_arrived_note }}
+                    @endif
+                @else
+                    -
+                @endif
+            </td>
+        </tr>
+        @endif
         <tr>
             <td class="label">Tugboat/Barge</td>
             <td class="value">: {{ $tugbarge ?? '-' }}</td>
@@ -145,7 +165,7 @@
             <td>: {{ $consignee ?? '-' }}</td>
         </tr>
         <tr>
-            <td class="label">Notify Address</td>
+            <td class="label">{{ $to === 'PT Bunga Teratai' ? 'Notify Party' : 'Notify Address' }}</td>
             <td>: {{ $notify_address ?? '-' }}</td>
         </tr>
         <tr>

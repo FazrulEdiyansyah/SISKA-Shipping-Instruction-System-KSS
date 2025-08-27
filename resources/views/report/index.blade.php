@@ -204,65 +204,6 @@
             </div>
         </form>
     </div>
-
-    <!-- Quick Report Templates -->
-    <div class="bg-white rounded-xl shadow-sm mt-6">
-        <div class="p-6 border-b border-gray-200">
-            <h4 class="text-lg font-semibold text-gray-900 flex items-center">
-                <i class="fas fa-lightning-bolt text-yellow-500 mr-2"></i>
-                Quick Report Templates
-            </h4>
-            <p class="text-sm text-gray-600 mt-1">Generate predefined reports with one click</p>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Summary Report -->
-                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
-                    <div class="flex items-center mb-3">
-                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                            <i class="fas fa-chart-pie text-green-500"></i>
-                        </div>
-                        <h5 class="font-semibold text-gray-900">Summary Report</h5>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Basic summary with essential columns (Date, Number, Vendor, Status)</p>
-                    <button onclick="generateQuickReport('summary')" 
-                            class="w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm transition duration-200">
-                        Generate Summary
-                    </button>
-                </div>
-
-                <!-- Detailed Report -->
-                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
-                    <div class="flex items-center mb-3">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                            <i class="fas fa-list-alt text-blue-500"></i>
-                        </div>
-                        <h5 class="font-semibold text-gray-900">Detailed Report</h5>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Complete report with all available columns and information</p>
-                    <button onclick="generateQuickReport('detailed')" 
-                            class="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm transition duration-200">
-                        Generate Detailed
-                    </button>
-                </div>
-
-                <!-- SPAL Status Report -->
-                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
-                    <div class="flex items-center mb-3">
-                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
-                            <i class="fas fa-file-contract text-purple-500"></i>
-                        </div>
-                        <h5 class="font-semibold text-gray-900">SPAL Status</h5>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-4">Focus on SPAL document status and completion tracking</p>
-                    <button onclick="generateQuickReport('spal')" 
-                            class="w-full px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-sm transition duration-200">
-                        Generate SPAL
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -321,41 +262,6 @@ function resetToDefault() {
     document.querySelectorAll('input[name="columns[]"]').forEach(checkbox => {
         checkbox.checked = ['date', 'number', 'to', 'status'].includes(checkbox.value);
     });
-}
-
-// Quick report generation
-function generateQuickReport(type) {
-    const form = document.querySelector('form');
-    const dateFrom = document.querySelector('input[name="date_from"]');
-    const dateTo = document.querySelector('input[name="date_to"]');
-    
-    // Reset checkboxes first
-    deselectAllColumns();
-    
-    // Set columns based on report type
-    switch(type) {
-        case 'summary':
-            ['date', 'number', 'to', 'status'].forEach(col => {
-                document.querySelector(`input[value="${col}"]`).checked = true;
-            });
-            break;
-        case 'detailed':
-            selectAllColumns();
-            break;
-        case 'spal':
-            ['date', 'number', 'to', 'spal_number', 'status'].forEach(col => {
-                document.querySelector(`input[value="${col}"]`).checked = true;
-            });
-            break;
-    }
-    
-    // Set current month if dates are empty
-    if (!dateFrom.value || !dateTo.value) {
-        setDateRange('thisMonth');
-    }
-    
-    // Submit form
-    form.submit();
 }
 
 // Form validation

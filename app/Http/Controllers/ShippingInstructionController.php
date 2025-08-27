@@ -34,16 +34,26 @@ class ShippingInstructionController extends Controller
         return response()->json(['document_number' => $docNumber]);
     }
 
-    /**
-     * Ambil inisial vendor dari nama vendor.
-     * Contoh: "BERLIAN LINTAS TAMA" => "BLT"
-     */
     private function getVendorInitial($vendor)
     {
         if (!$vendor) return '';
+        if (strtolower($vendor) === 'pt bunga teratai') {
+            return 'BT';
+        }
         return collect(explode(' ', $vendor))
             ->filter(fn($w) => trim($w) !== '')
             ->map(fn($w) => strtoupper($w[0]))
             ->join('');
+    }
+
+    public function index()
+    {
+        $shippingInstructions = \App\Models\ShippingInstruction::orderBy('created_at', 'desc')->paginate(10);
+
+        $totalSI = \App\Models\ShippingInstruction::count();
+        $totalCompleted = \App\Models\ShippingInstruction::whereNotNull('completed_at')->count();
+        $totalOnlySI = \App\Models\ShippingInstruction::whereNull('completed_at')->count();
+
+        return view('shipping.shipping-instruction-overview', compact('shippingInstructions', 'totalSI', 'totalCompleted', 'totalOnlySI'));
     }
 }

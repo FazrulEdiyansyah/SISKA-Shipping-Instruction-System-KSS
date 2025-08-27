@@ -30,18 +30,18 @@
             </div>
             
             <!-- Stats Cards -->
-            <div class="flex gap-4">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center min-w-[100px]">
-                    <div class="text-2xl font-bold text-blue-600">{{ $shippingInstructions->total() }}</div>
-                    <div class="text-xs text-blue-600 font-medium">Total SI</div>
+            <div class="flex gap-4 mb-4">
+                <div class="bg-blue-50 border border-blue-100 rounded-xl px-6 py-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">{{ $totalSI }}</div>
+                    <div class="text-blue-700 mt-1">Total SI</div>
                 </div>
-                <div class="bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-center min-w-[100px]">
-                    <div class="text-2xl font-bold text-green-600">{{ $shippingInstructions->where('completed_at', '!=', null)->count() }}</div>
-                    <div class="text-xs text-green-600 font-medium">Completed</div>
+                <div class="bg-green-50 border border-green-100 rounded-xl px-6 py-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">{{ $totalCompleted }}</div>
+                    <div class="text-green-700 mt-1">Completed</div>
                 </div>
-                <div class="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 text-center min-w-[100px]">
-                    <div class="text-2xl font-bold text-yellow-600">{{ $shippingInstructions->where('completed_at', null)->count() }}</div>
-                    <div class="text-xs text-yellow-600 font-medium">Only SI</div>
+                <div class="bg-yellow-50 border border-yellow-100 rounded-xl px-6 py-4 text-center">
+                    <div class="text-2xl font-bold text-yellow-600">{{ $totalOnlySI }}</div>
+                    <div class="text-yellow-700 mt-1">Only SI</div>
                 </div>
             </div>
         </div>
@@ -113,10 +113,7 @@
                             </div>
                         </th>
                         <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                            <div class="flex items-center cursor-pointer hover:text-gray-900" onclick="sortTable(2)">
-                                Vendor
-                                <i class="fas fa-sort ml-1 opacity-50"></i>
-                            </div>
+                            Vendor
                         </th>
                         <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             Tug/Barge
@@ -179,7 +176,7 @@
                         <td class="px-4 py-4 text-center">
                             <div class="flex items-center justify-center space-x-2">
                                 <a href="{{ url('/shipping-instruction-preview/'.$si->id) }}" 
-                                   class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition duration-200"
+                                   class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition duration-200 border border-blue-200"
                                    title="View Details">
                                     <i class="fas fa-eye mr-1"></i>
                                     View
