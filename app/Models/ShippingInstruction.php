@@ -10,11 +10,16 @@ class ShippingInstruction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'number', 'to', 'tugbarge', 'flag', 'shipper', 'consignee', 'notify_address',
+        'number', 'to', 'tugbarge', 'flag',
+        'vessel_name', 'vessel_arrived', 'vessel_arrived_note',
+        'shipper', 'consignee', 'notify_address',
         'port_loading', 'port_discharging', 'commodities', 'quantity',
         'laycan_start', 'laycan_end', 'place', 'date',
         'signed_by', 'remarks',
-        'spal_number', 'spal_document', 'completed_at'
+        'spal_number', 'spal_document',
+        'mra_rab_document',
+        'completed_at',
+        'project_type',
     ];
 
     protected $casts = [
@@ -29,7 +34,14 @@ class ShippingInstruction extends Model
     // Method untuk mengecek status berdasarkan SPAL
     public function getStatusAttribute()
     {
-        return $this->spal_number && $this->spal_document ? 'Completed' : 'Only SI';
+        // Completed jika SPAL dan MRA & RAB sudah ada
+        if (
+            $this->spal_number && $this->spal_document && $this->mra_rab_document
+        ) {
+            return 'Completed';
+        }
+        // Incomplete jika salah satu/belum ada dokumen
+        return 'Incomplete';
     }
 
     public function signatory()
@@ -131,7 +143,10 @@ class ShippingInstruction extends Model
             $signatoryData = self::getSignatoryData($data['signed_by']);
             $data = array_merge($data, $signatoryData);
         }
-        
+        $data['vessel_name'] = $input['vessel_name'] ?? null;
+        $data['vessel_arrived'] = $input['vessel_arrived'] ?? null;
+        $data['vessel_arrived_note'] = $input['vessel_arrived_note'] ?? null;
+        $data['project_type'] = $input['project_type'] ?? 'default';
         return $data;
     }
 }

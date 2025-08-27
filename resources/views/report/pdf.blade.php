@@ -100,7 +100,7 @@
         
         .data-table th {
             padding: 10px 6px;
-            text-align: left;
+            text-align: center; /* Tambahkan ini untuk rata tengah */
             font-weight: 600;
             font-size: 8px;
             color: white;
@@ -298,10 +298,10 @@
                                 <span class="font-bold">{{ $row->spal_number ?? '-' }}</span>
                                 @break
                             @case('status')
-                                @if($row->completed_at)
+                                @if($row->spal_number && $row->spal_document && $row->mra_rab_document)
                                     <span class="status-completed">COMPLETED</span>
                                 @else
-                                    <span class="status-pending">ONLY SI</span>
+                                    <span class="status-pending">INCOMPLETE</span>
                                 @endif
                                 @break
                             @case('quantity')
@@ -329,8 +329,9 @@
         <div class="summary-title">Ringkasan Laporan</div>
         <div class="summary-content">
             <strong>Total Dokumen:</strong> {{ $reports->count() }} shipping instruction<br>
-            <strong>Dokumen Completed:</strong> {{ $reports->where('completed_at', '!=', null)->count() }} dokumen<br>
+            <strong>Dokumen Completed:</strong> {{ $reports->where('spal_number', '!=', null)->where('spal_document', '!=', null)->where('mra_rab_document', '!=', null)->count() }} dokumen<br>
             <strong>Only SI:</strong> {{ $reports->where('completed_at', null)->count() }} dokumen<br>
+            <strong>Incomplete:</strong> {{ $reports->where(function($row) { return empty($row->spal_number) || empty($row->spal_document) || empty($row->mra_rab_document); })->count() }} dokumen<br>
             <strong>Tanggal Cetak:</strong> {{ \Carbon\Carbon::now()->format('d F Y') }}
         </div>
     </div>

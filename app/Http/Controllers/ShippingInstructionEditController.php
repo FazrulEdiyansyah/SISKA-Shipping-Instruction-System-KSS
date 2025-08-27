@@ -74,6 +74,18 @@ class ShippingInstructionEditController extends Controller
             $spalDocument = $fileName;
         }
 
+        // Handle MRA & RAB document upload
+        $mraRabDocument = $si->mra_rab_document;
+        if ($request->hasFile('mra_rab_document')) {
+            if ($si->mra_rab_document && \Storage::exists('public/mra_rab_documents/' . $si->mra_rab_document)) {
+                \Storage::delete('public/mra_rab_documents/' . $si->mra_rab_document);
+            }
+            $file = $request->file('mra_rab_document');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/mra_rab_documents', $fileName);
+            $mraRabDocument = $fileName;
+        }
+
         // Determine completed_at based on SPAL data
         $completedAt = null;
         if ($request->spal_number && $spalDocument) {
@@ -101,6 +113,11 @@ class ShippingInstructionEditController extends Controller
             'spal_number' => $request->spal_number,
             'spal_document' => $spalDocument,
             'completed_at' => $completedAt,
+            'vessel_name' => $request->vessel_name,
+            'vessel_arrived' => $request->vessel_arrived,
+            'vessel_arrived_note' => $request->vessel_arrived_note,
+            'project_type' => $request->project_type ?? 'default',
+            'mra_rab_document' => $mraRabDocument,
         ]);
         
         return redirect()->route('shipping-instruction.detail', $id)

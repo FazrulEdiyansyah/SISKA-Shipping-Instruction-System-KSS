@@ -77,6 +77,29 @@
                             </div>
                         </div>
                     </div>
+                    @if(($data['project_type'] ?? 'default') === 'sts')
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500 mb-2">Vessel Name</label>
+                            <div class="bg-gray-50 p-3 rounded-lg border">
+                                <p class="text-gray-900">{{ $data['vessel_name'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500 mb-2">Vessel Arrived</label>
+                            <div class="bg-gray-50 p-3 rounded-lg border">
+                                <div class="flex gap-3 items-center">
+                                    <p class="text-gray-900">
+                                        {{ $data['vessel_arrived'] ? \Carbon\Carbon::parse($data['vessel_arrived'])->format('d F Y') : '-' }}
+                                        @if(!empty($data['vessel_arrived_note']))
+                                        <span class="text-gray-900">{{ $data['vessel_arrived_note'] }}</span>
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -233,6 +256,35 @@
                 </div>
             </div>
 
+            <!-- MRA & RAB Document -->
+            <div class="bg-white rounded-xl shadow-sm">
+                <div class="p-6 border-b border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <i class="fas fa-file-contract text-blue-500 mr-2"></i>
+                        MRA & RAB Document
+                    </h4>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500 mb-2">MRA & RAB Document</label>
+                            <div class="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
+                                <p class="text-gray-900 mb-0">
+                                    {{ $data['mra_rab_document'] ?? '-' }}
+                                </p>
+                                @if(!empty($data['mra_rab_document']))
+                                    <a href="{{ asset('storage/mra_rab_documents/' . $data['mra_rab_document']) }}" 
+                                       class="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
+                                       download="MRA-RAB-{{ $data['number'] ?? 'document' }}.pdf">
+                                        <i class="fas fa-download mr-1"></i> Download
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Signatory Information -->
             <div class="bg-white rounded-xl shadow-sm">
                 <div class="p-6 border-b border-gray-200">
@@ -275,17 +327,11 @@
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-500">Status:</span>
-                        @if($si->spal_number && $si->spal_document)
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <i class="fas fa-check-circle mr-1"></i>
-                                Completed
-                            </span>
-                        @else
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                <i class="fas fa-clock mr-1"></i>
-                                Only SI
-                            </span>
-                        @endif
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                            {{ $si->status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                            <i class="fas {{ $si->status === 'Completed' ? 'fa-check-circle' : 'fa-exclamation-circle' }} mr-1"></i>
+                            {{ $si->status }}
+                        </span>
                     </div>
                 </div>
             </div>

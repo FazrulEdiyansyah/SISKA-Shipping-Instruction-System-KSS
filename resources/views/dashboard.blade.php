@@ -189,7 +189,7 @@
                                             @else
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                                     <i class="fas fa-clock mr-1"></i>
-                                                    Only SI
+                                                    Incomplete
                                                 </span>
                                             @endif
                                         </td>

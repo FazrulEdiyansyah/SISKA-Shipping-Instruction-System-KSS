@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class ShippingInstructionController extends Controller
@@ -51,9 +52,39 @@ class ShippingInstructionController extends Controller
         $shippingInstructions = \App\Models\ShippingInstruction::orderBy('created_at', 'desc')->paginate(10);
 
         $totalSI = \App\Models\ShippingInstruction::count();
-        $totalCompleted = \App\Models\ShippingInstruction::whereNotNull('completed_at')->count();
-        $totalOnlySI = \App\Models\ShippingInstruction::whereNull('completed_at')->count();
+        $totalCompleted = \App\Models\ShippingInstruction::whereNotNull('spal_number')
+            ->whereNotNull('spal_document')
+            ->whereNotNull('mra_rab_document')
+            ->count();
+        $totalIncomplete = $totalSI - $totalCompleted;
 
-        return view('shipping.shipping-instruction-overview', compact('shippingInstructions', 'totalSI', 'totalCompleted', 'totalOnlySI'));
+        return view('shipping.shipping-instruction-overview', compact('shippingInstructions', 'totalSI', 'totalCompleted', 'totalIncomplete'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $si = ShippingInstruction::findOrFail($id);
+
+        // ...validasi dan update field lain...
+
+        // Handle SPAL document (sudah ada)
+        // ...existing code...
+
+        // Handle MRA & RAB document
+        if ($request->hasFile('mra_rab_document')) {
+            // Hapus file lama jika ada
+            if ($si->mra_rab_document && Storage::exists('public/mra_rab_documents/' . $si->mra_rab_document)) {
+                Storage::delete('public/mra_rab_documents/' . $si->mra_rab_document);
+            }
+            $file = $request->file('mra_rab_document');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/mra_rab_documents', $fileName);
+            $si->mra_rab_document = $fileName;
+        }
+
+        // ...update field lain...
+        $si->save();
+
+        // ...redirect/response...
     }
 }

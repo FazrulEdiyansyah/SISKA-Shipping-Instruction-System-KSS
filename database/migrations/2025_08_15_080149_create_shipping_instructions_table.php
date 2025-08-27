@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('to');
             $table->string('tugbarge');
             $table->string('flag');
+            $table->string('vessel_name')->nullable();
+            $table->date('vessel_arrived')->nullable();
+            $table->string('vessel_arrived_note')->nullable();
             $table->string('shipper');
             $table->string('consignee');
             $table->text('notify_address');
@@ -30,6 +33,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('signed_by');
             $table->string('remarks')->nullable();
+            $table->string('project_type')->default('default');
             $table->timestamps();
         });
     }
@@ -39,6 +43,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('shipping_instructions', function (Blueprint $table) {
+            $table->dropColumn('vessel_arrived_note');
+            $table->dropColumn('project_type');
+        });
+
         Schema::dropIfExists('shipping_instructions');
     }
 };

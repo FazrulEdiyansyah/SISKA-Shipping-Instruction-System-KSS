@@ -40,8 +40,8 @@
                     <div class="text-green-700 mt-1">Completed</div>
                 </div>
                 <div class="bg-yellow-50 border border-yellow-100 rounded-xl px-6 py-4 text-center">
-                    <div class="text-2xl font-bold text-yellow-600">{{ $totalOnlySI }}</div>
-                    <div class="text-yellow-700 mt-1">Only SI</div>
+                    <div class="text-2xl font-bold text-yellow-600">{{ $totalIncomplete }}</div>
+                    <div class="text-yellow-700 mt-1">Incomplete</div>
                 </div>
             </div>
         </div>
@@ -73,9 +73,9 @@
                         <i class="fas fa-check-circle text-green-500 mr-1"></i>
                         Completed
                     </button>
-                    <button id="filterOnlySI" class="px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 text-sm font-medium">
+                    <button id="filterIncomplete" class="px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 text-sm font-medium">
                         <i class="fas fa-clock text-yellow-500 mr-1"></i>
-                        Only SI
+                        Incomplete
                     </button>
                     <button id="filterBtn" class="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center gap-2 font-medium">
                         <i class="fas fa-filter"></i>
@@ -137,7 +137,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($shippingInstructions as $si)
-                    <tr class="hover:bg-gray-50 transition duration-200" data-status="{{ $si->completed_at ? 'completed' : 'only-si' }}">
+                    <tr class="hover:bg-gray-50 transition duration-200" data-status="{{ $si->completed_at ? 'completed' : 'incomplete' }}">
                         <td class="px-4 py-4 text-sm text-gray-600 font-medium">
                             {{ ($shippingInstructions->currentPage() - 1) * $shippingInstructions->perPage() + $loop->iteration }}
                         </td>
@@ -169,7 +169,7 @@
                             @else
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
                                     <i class="fas fa-clock mr-1"></i>
-                                    Only SI
+                                    Incomplete
                                 </span>
                             @endif
                         </td>
@@ -287,7 +287,7 @@
                     <select id="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="">All Status</option>
                         <option value="completed">Completed</option>
-                        <option value="only-si">Only SI</option>
+                        <option value="incomplete">Incomplete</option>
                     </select>
                 </div>
                 
@@ -370,8 +370,8 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleQuickFilter('status', 'completed', this);
     });
     
-    document.getElementById('filterOnlySI').addEventListener('click', function() {
-        toggleQuickFilter('status', 'only-si', this);
+    document.getElementById('filterIncomplete').addEventListener('click', function() {
+        toggleQuickFilter('status', 'incomplete', this);
     });
     
     document.getElementById('resetAllFilters').addEventListener('click', function() {
@@ -391,7 +391,7 @@ function toggleQuickFilter(filterType, filterValue, button) {
         
         // Remove active state from other status buttons
         document.querySelectorAll('[id^="filter"]:not(#' + button.id + ')').forEach(btn => {
-            if (btn.id.includes('Completed') || btn.id.includes('OnlySI')) {
+            if (btn.id.includes('Completed') || btn.id.includes('Incomplete')) {
                 btn.classList.remove('bg-blue-600', 'text-white');
                 btn.classList.add('bg-white', 'border-gray-300');
             }
@@ -510,7 +510,7 @@ function removeFilter(filterKey) {
     
     // Reset corresponding UI elements
     if (filterKey === 'status') {
-        document.querySelectorAll('[id^="filter"][id*="Completed"], [id^="filter"][id*="OnlySI"]').forEach(btn => {
+        document.querySelectorAll('[id^="filter"][id*="Completed"], [id^="filter"][id*="Incomplete"]').forEach(btn => {
             btn.classList.remove('bg-blue-600', 'text-white');
             btn.classList.add('bg-white', 'border-gray-300');
         });

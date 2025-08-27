@@ -9,7 +9,7 @@
             margin: 0.5cm 1.6cm 1cm 2cm;
         }
         body {
-            font-family: Verdana, Geneva, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             font-size: 15px;
             color: #222;
             line-height: 1.15;
@@ -50,7 +50,7 @@
         .main-table td {
             padding: 3px 6px 3px 0;
             vertical-align: top;
-            font-family: Verdana, Geneva, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             font-size: 15px;
             line-height: 1.5;
         }
@@ -128,7 +128,7 @@
     </p>
 
     <table class="main-table">
-        @if($to === 'PT Bunga Teratai')
+        @if($project_type === 'sts')
         <tr>
             <td class="label">Vessel Name</td>
             <td>: {{ $vessel_name ?? '-' }}</td>
