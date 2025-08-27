@@ -120,12 +120,12 @@ class ReportController extends Controller
                 ['key' => 'to', 'name' => 'Pemasok', 'checked' => true],
                 ['key' => 'tugbarge', 'name' => 'Tugbarge', 'checked' => false],
                 ['key' => 'shipper', 'name' => 'Shipper', 'checked' => false],
+                ['key' => 'laycan', 'name' => 'Laycan', 'checked' => false],
                 ['key' => 'port_loading', 'name' => 'Port Loading', 'checked' => false],
                 ['key' => 'port_discharging', 'name' => 'Port Discharging', 'checked' => false],
                 ['key' => 'commodities', 'name' => 'Commodities', 'checked' => false],
                 ['key' => 'quantity', 'name' => 'Quantity', 'checked' => false],
-                ['key' => 'laycan', 'name' => 'Laycan', 'checked' => false],
-                ['key' => 'spal_number', 'name' => 'Nomor SPAL', 'checked' => false], // Tambahkan ini
+                ['key' => 'spal_number', 'name' => 'Nomor SPAL', 'checked' => false],
                 ['key' => 'status', 'name' => 'Status', 'checked' => true],
             ]
         ]);

@@ -74,6 +74,32 @@
             </div>
         </div>
         
+        <!-- Pilihan Project -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-project-diagram text-blue-500 mr-2"></i>
+                    Project Type
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Select project type to show relevant fields</p>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-3">
+                    <button type="button" id="projectDefaultBtn" 
+                            class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200 flex items-center gap-2">
+                        <i class="fas fa-ship"></i>
+                        Default
+                    </button>
+                    <button type="button" id="projectSTSBtn" 
+                            class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition duration-200 flex items-center gap-2">
+                        <i class="fas fa-exchange-alt"></i>
+                        Ship To Ship
+                    </button>
+                </div>
+                <input type="hidden" name="project_type" id="projectTypeInput" value="default">
+            </div>
+        </div>
+
         <!-- Vessel Information Section -->
         <div class="bg-white rounded-xl shadow-sm">
             <div class="p-6 border-b border-gray-200">
@@ -84,45 +110,52 @@
                 <p class="text-sm text-gray-600 mt-1">Details about the vessel and its registration</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="space-y-4">
-                        <!-- Field khusus untuk Bunga Teratai -->
-                        <div id="bungaTerataiFields" style="display:none;">
-                            <div class="space-y-4">
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-700">Vessel Name *</label>
-                                    <input type="text" name="vessel_name"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Vessel Name"
-                                        value="{{ session('si_preview_data.vessel_name') ?? old('vessel_name') }}">
+                <!-- Field khusus untuk Ship To Ship -->
+                <div id="stsFields" style="display:none;" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <h5 class="text-md font-semibold text-blue-900 mb-4 flex items-center">
+                        <i class="fas fa-anchor text-blue-600 mr-2"></i>
+                        Ship To Ship Information
+                    </h5>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-blue-800">Vessel Name *</label>
+                            <input type="text" name="vessel_name"
+                                class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                                placeholder="Enter vessel name"
+                                value="{{ session('si_preview_data.vessel_name') ?? old('vessel_name') }}">
+                            <p class="text-xs text-blue-600">Name of the receiving vessel</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-blue-800">Vessel Arrived *</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <input type="date" name="vessel_arrived"
+                                        class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                                        value="{{ session('si_preview_data.vessel_arrived') ?? old('vessel_arrived') }}">
+                                    <p class="text-xs text-blue-600 mt-1">Arrival date</p>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-700">Vessel Arrived *</label>
-                                    <div class="flex gap-2">
-                                        <input type="date" name="vessel_arrived"
-                                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            value="{{ session('si_preview_data.vessel_arrived') ?? old('vessel_arrived') }}">
-                                        <input type="text" name="vessel_arrived_note"
-                                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            placeholder="Keterangan/Note (optional)"
-                                            value="{{ session('si_preview_data.vessel_arrived_note') ?? old('vessel_arrived_note') }}">
-                                    </div>
-                                    <p class="text-xs text-gray-500">Tanggal wajib diisi, keterangan opsional</p>
+                                <div>
+                                    <input type="text" name="vessel_arrived_note"
+                                        class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                                        placeholder="Additional notes (optional)"
+                                        value="{{ session('si_preview_data.vessel_arrived_note') ?? old('vessel_arrived_note') }}">
+                                    <p class="text-xs text-blue-600 mt-1">Optional notes</p>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Tugboat/Barge -->
-                        <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
-                            <input type="text" name="tugbarge"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
-                                value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
-                            <p class="text-xs text-gray-500">Vessel name and identification</p>
-                        </div>
                     </div>
+                </div>
 
+                <!-- Standard vessel fields -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
+                        <input type="text" name="tugbarge"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
+                            value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
+                        <p class="text-xs text-gray-500">Vessel name and identification</p>
+                    </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Flag State *</label>
                         <input type="text" name="flag"
@@ -432,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ vendor })
             })
             .then(res => res.json())
-            .then(data => {
+            .then data => {
                 docNumberInput.value = data.document_number;
             });
         }
@@ -481,6 +514,54 @@ document.addEventListener('DOMContentLoaded', function() {
     
     vendorInput.addEventListener('change', toggleBungaTerataiFields);
     toggleBungaTerataiFields(); // initial load
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const projectDefaultBtn = document.getElementById('projectDefaultBtn');
+    const projectSTSBtn = document.getElementById('projectSTSBtn');
+    const projectTypeInput = document.getElementById('projectTypeInput');
+    const stsFields = document.getElementById('stsFields');
+
+    function updateProjectButtons(selectedType) {
+        if (selectedType === 'sts') {
+            // STS button active
+            projectSTSBtn.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            projectSTSBtn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            
+            // Default button inactive
+            projectDefaultBtn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            projectDefaultBtn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            
+            // Show STS fields
+            stsFields.style.display = '';
+        } else {
+            // Default button active
+            projectDefaultBtn.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            projectDefaultBtn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            
+            // STS button inactive
+            projectSTSBtn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+            projectSTSBtn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+            
+            // Hide STS fields
+            stsFields.style.display = 'none';
+        }
+    }
+
+    projectDefaultBtn.addEventListener('click', function() {
+        projectTypeInput.value = 'default';
+        updateProjectButtons('default');
+    });
+
+    projectSTSBtn.addEventListener('click', function() {
+        projectTypeInput.value = 'sts';
+        updateProjectButtons('sts');
+    });
+
+    // Initial state
+    updateProjectButtons(projectTypeInput.value);
 });
 </script>
 @endsection

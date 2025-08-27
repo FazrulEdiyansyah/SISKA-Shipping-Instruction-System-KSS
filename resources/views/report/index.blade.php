@@ -138,6 +138,12 @@
                                 <span class="text-xs text-gray-500">(Cargo quantity)</span>
                             </label>
                             <label class="flex items-center space-x-3 p-2 hover:bg-white rounded transition duration-200">
+                                <input type="checkbox" name="columns[]" value="laycan" 
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm font-medium text-gray-700">Laycan</span>
+                                <span class="text-xs text-gray-500">(Loading window)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-2 hover:bg-white rounded transition duration-200">
                                 <input type="checkbox" name="columns[]" value="port_loading" 
                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                                 <span class="text-sm font-medium text-gray-700">Port Loading</span>
@@ -148,12 +154,6 @@
                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                                 <span class="text-sm font-medium text-gray-700">Port Discharging</span>
                                 <span class="text-xs text-gray-500">(Discharge port)</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-2 hover:bg-white rounded transition duration-200">
-                                <input type="checkbox" name="columns[]" value="laycan" 
-                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <span class="text-sm font-medium text-gray-700">Laycan</span>
-                                <span class="text-xs text-gray-500">(Loading window)</span>
                             </label>
                             <label class="flex items-center space-x-3 p-2 hover:bg-white rounded transition duration-200">
                                 <input type="checkbox" name="columns[]" value="spal_number" 
