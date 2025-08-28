@@ -453,30 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    vendorInput.addEventListener('blur', function() {
-        const vendor = vendorInput.value;
-        if (vendor.length > 0) {
-            fetch('/shipping-instruction/generate-number', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ vendor })
-            })
-            .then(res => res.json())
-            .then(data => {
-                docNumberInput.value = data.document_number;
-            });
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('input', function() {
-            // No preview button, so nothing to update here
-        });
-    }
 });
 
 // Tambah animasi slide out
