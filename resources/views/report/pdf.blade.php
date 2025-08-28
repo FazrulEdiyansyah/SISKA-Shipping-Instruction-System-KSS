@@ -37,7 +37,7 @@
         .logo-left {
             position: absolute;
             left: 0;
-            top: 10px;
+            top: 15px;
             height: 60px;
             width: auto;
         }

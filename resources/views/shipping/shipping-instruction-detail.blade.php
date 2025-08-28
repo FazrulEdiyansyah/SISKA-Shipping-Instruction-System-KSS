@@ -94,7 +94,7 @@
                                     <p class="text-blue-900 font-medium">
                                         {{ $data['vessel_arrived'] ? \Carbon\Carbon::parse($data['vessel_arrived'])->format('d F Y') : '-' }}
                                         @if(!empty($data['vessel_arrived_note']))
-                                        <span class="text-blue-700 ml-2">({{ $data['vessel_arrived_note'] }})</span>
+                                        <span class="text-blue-900 ml-2">{{ $data['vessel_arrived_note'] }}</span>
                                         @endif
                                     </p>
                                 </div>
