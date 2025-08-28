@@ -44,7 +44,7 @@
                         <div class="flex gap-2">
                             <input type="text" name="place"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="Enter location" required
+                                placeholder="e.g., Cilegon" required
                                 value="{{ session('si_preview_data.place') ?? old('place') }}">
                             <input type="date" name="date"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
@@ -121,7 +121,7 @@
                             <label class="block text-sm font-semibold text-blue-800">Vessel Name *</label>
                             <input type="text" name="vessel_name"
                                 class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                                placeholder="Enter receiving vessel name"
+                                placeholder="Enter vessel name"
                                 value="{{ session('si_preview_data.vessel_name') ?? old('vessel_name') }}">
                             <p class="text-xs text-blue-600">Name of the receiving vessel</p>
                         </div>
@@ -137,7 +137,7 @@
                                 <div>
                                     <input type="text" name="vessel_arrived_note"
                                         class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                                        placeholder="Enter arrival time or notes"
+                                        placeholder="Additional notes (optional)"
                                         value="{{ session('si_preview_data.vessel_arrived_note') ?? old('vessel_arrived_note') }}">
                                     <p class="text-xs text-blue-600 mt-1">Optional notes</p>
                                 </div>
@@ -152,7 +152,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
                         <input type="text" name="tugbarge"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="Enter tugboat and barge name" required
+                            placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
                             value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
                         <p class="text-xs text-gray-500">Vessel name and identification</p>
                     </div>
@@ -160,7 +160,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Flag State *</label>
                         <input type="text" name="flag"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="Enter vessel flag state" required
+                            placeholder="e.g., Indonesia" required
                             value="{{ session('si_preview_data.flag') ?? old('flag') }}">
                         <p class="text-xs text-gray-500">Country of vessel registration</p>
                     </div>
@@ -184,7 +184,7 @@
                             <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
                             <input type="text" name="shipper"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="Enter shipping company name" required
+                                placeholder="e.g., PT Dizamatra Powerindo" required
                                 value="{{ session('si_preview_data.shipper') ?? old('shipper') }}">
                             <p class="text-xs text-gray-500">Company shipping the goods</p>
                         </div>
@@ -192,7 +192,7 @@
                             <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
                             <input type="text" name="consignee"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="Enter consignee details" required
+                                placeholder="e.g., To the order" required
                                 value="{{ session('si_preview_data.consignee') ?? old('consignee') }}">
                             <p class="text-xs text-gray-500">Company receiving the goods</p>
                         </div>
@@ -201,7 +201,7 @@
                         <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">Notify Address *</label>
                         <textarea name="notify_address" rows="3"
                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                  placeholder="Enter complete notification address and contact details" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
+                                  placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
                         <p class="text-xs text-gray-500">Complete address for notifications</p>
                     </div>
                 </div>
@@ -223,7 +223,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Port of Loading *</label>
                         <input type="text" name="port_loading"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="Enter loading port name and location" required
+                            placeholder="e.g., Jetty Patratani, Muara Enim, Indonesia" required
                             value="{{ session('si_preview_data.port_loading') ?? old('port_loading') }}">
                         <p class="text-xs text-gray-500">Port where cargo will be loaded</p>
                     </div>
@@ -231,7 +231,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Port of Discharging *</label>
                         <input type="text" name="port_discharging"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="Enter discharge port or facility name" required
+                            placeholder="e.g., PLTU Palton Unit 7-8" required
                             value="{{ session('si_preview_data.port_discharging') ?? old('port_discharging') }}">
                         <p class="text-xs text-gray-500">Port where cargo will be discharged</p>
                     </div>
@@ -254,7 +254,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Commodities *</label>
                         <input type="text" name="commodities"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="Enter type of cargo being shipped" required
+                            placeholder="e.g., Indonesian Steam Coal in Bulk" required
                             value="{{ session('si_preview_data.commodities') ?? old('commodities') }}">
                         <p class="text-xs text-gray-500">Type of goods being shipped</p>
                     </div>
@@ -262,7 +262,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Quantity *</label>
                         <input type="text" name="quantity"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="Enter cargo quantity with tolerance" required
+                            placeholder="e.g., 8.500 MT +/- 10%" required
                             value="{{ session('si_preview_data.quantity') ?? old('quantity') }}">
                         <p class="text-xs text-gray-500">Amount and measurement unit</p>
                     </div>
