@@ -2,219 +2,516 @@
 
 @section('title', 'Ship Vendor Management - SISKA')
 @section('page-title', 'Ship Vendor Management')
-@section('page-subtitle', 'Manage ship vendors and their information')
+@section('page-subtitle', 'Manage shipping vendors and their information')
 
 @section('content')
-<div class="max-w-6xl mx-auto">
+<div class="max-w-7xl mx-auto">
     <!-- Header Section -->
     <div class="bg-white rounded-xl shadow-sm mb-6">
         <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-900">Ship Vendor Management</h3>
-                    <p class="text-sm text-gray-600 mt-1">Manage all ship vendors and their company information</p>
+                    <h3 class="text-2xl font-bold text-gray-900">Ship Vendor Management</h3>
+                    <p class="text-gray-600 mt-1">Manage shipping vendors, companies, and their information</p>
                 </div>
-                <button onclick="openAddModal()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition duration-200">
-                    <i class="fas fa-plus mr-2"></i>
-                    Add New Vendor
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Card -->
-    <div class="grid grid-cols-1 mb-6">
-        <!-- Total Vendors -->
-        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-blue-100 text-sm">Total Vendors</p>
-                    <p class="text-2xl font-bold">{{ $vendors->count() }}</p>
-                    <p class="text-blue-100 text-xs mt-1">Registered ship vendors</p>
-                </div>
-                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-building text-xl"></i>
+                <div class="flex items-center space-x-4">
+                    <!-- Stats Card -->
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl px-6 py-3 text-center">
+                        <div class="text-xl font-bold text-blue-600">{{ $vendors->count() }}</div>
+                        <div class="text-blue-700 text-sm font-medium">Total Vendors</div>
+                    </div>
+                    <button onclick="openAddModal()" 
+                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-lg">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add New Vendor
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Filter and Search -->
+    <!-- Search Section -->
     <div class="bg-white rounded-xl shadow-sm mb-6">
         <div class="p-6">
-            <div class="flex flex-col sm:flex-row gap-4">
-                <div class="flex-1">
-                    <div class="relative">
-                        <input type="text" placeholder="Search vendors by name..." class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
-                    </div>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
                 </div>
-                <div class="flex gap-3">
-                    <select class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px]">
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
+                <input type="text" id="searchInput" 
+                       placeholder="Search by company name or initials..." 
+                       class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <button id="clearSearch" class="text-gray-400 hover:text-gray-600 transition-colors duration-200 hidden">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Vendors List -->
+    <!-- Vendors Table -->
     <div class="bg-white rounded-xl shadow-sm">
         <div class="p-6 border-b border-gray-200">
-            <h4 class="text-lg font-semibold text-gray-900">Ship Vendors</h4>
-            <p class="text-sm text-gray-600 mt-1">Complete list of ship vendors</p>
+            <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                <i class="fas fa-building text-blue-500 mr-2"></i>
+                Vendor List
+            </h4>
+            <p class="text-sm text-gray-600 mt-1">All registered shipping vendors and their details</p>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-50">
+            <table class="w-full" id="vendorsTable">
+                <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendor Company</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Initials</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Company Name
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Initials
+                        </th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
-                <tbody id="vendor-table-body" class="bg-white divide-y divide-gray-200">
-                    @if($vendors->isEmpty())
-                        <tr>
-                            <td colspan="4" class="py-12 text-center text-gray-400">
-                                <div class="flex flex-col items-center justify-center">
-                                    <!-- Inbox Icon SVG -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V7a2 2 0 00-2-2H6a2 2 0 00-2 2v6m16 0v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4m16 0H4m16 0l-3.293 3.293a1 1 0 01-1.414 0L12 15l-3.293 3.293a1 1 0 01-1.414 0L4 13"/>
-                                    </svg>
-                                    <span class="text-lg font-medium text-gray-400">No Data</span>
-                                </div>
-                            </td>
-                        </tr>
-                    @else
-                        @foreach($vendors as $vendor)
-                        <tr class="hover:bg-gray-50 transition-colors duration-200">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-                                        <i class="fas fa-building text-white text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-sm font-bold text-gray-900">{{ $vendor->company }}</div>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($vendors as $vendor)
+                    <tr class="hover:bg-gray-50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                        <i class="fas fa-building text-blue-600"></i>
                                     </div>
                                 </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                                    <span class="text-white font-bold text-sm">{{ $vendor->initials }}</span>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ $vendor->company }}</div>
+                                    <div class="text-xs text-gray-500 mt-0.5">Shipping Company</div>
                                 </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">{{ $vendor->status }}</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <button onclick="editVendor({{ $vendor->id }})" class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors duration-200">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button onclick="viewVendor({{ $vendor->id }})" class="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-colors duration-200">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button onclick="deleteVendor({{ $vendor->id }})" class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors duration-200">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    @endif
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                {{ $vendor->initials }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center justify-center space-x-2">
+                                <button onclick="editVendor(this)" 
+                                    data-company="{{ $vendor->company }}"
+                                    data-initials="{{ $vendor->initials }}"
+                                    data-id="{{ $vendor->id }}"
+                                    class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors duration-200 border border-blue-200"
+                                    title="Edit Vendor">
+                                    <i class="fas fa-edit mr-1.5"></i>
+                                    Edit
+                                </button>
+                                <button onclick="confirmDelete({{ $vendor->id }})" 
+                                    class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-medium rounded-lg hover:bg-red-100 transition-colors duration-200 border border-red-200"
+                                    title="Delete Vendor">
+                                    <i class="fas fa-trash mr-1.5"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="px-6 py-12 text-center">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-building text-4xl text-gray-300 mb-3"></i>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">No Vendors Found</h3>
+                                <p class="text-gray-500 mb-4">Get started by adding your first vendor.</p>
+                                <button onclick="openAddModal()" 
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Add Vendor
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
-        </div>
-        
-        <!-- Pagination -->
-        <div class="px-6 py-4 border-t border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-500">
-                    Showing 1 to 6 of 12 vendors
-                </div>
-                <div class="flex space-x-2">
-                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 hover:bg-gray-50 transition-colors duration-200">Previous</button>
-                    <button class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">1</button>
-                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 hover:bg-gray-50 transition-colors duration-200">2</button>
-                    <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 hover:bg-gray-50 transition-colors duration-200">Next</button>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
-{{-- Notifikasi sukses --}}
-@if(session('success'))
-    <div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between max-w-md w-full px-4 py-3 rounded bg-green-100 text-green-800 border border-green-200 shadow-lg">
-        <div class="flex items-center">
-            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            <span>{{ session('success') }}</span>
+<!-- Add/Edit Vendor Modal -->
+<div id="vendorModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h3 id="modalTitle" class="text-xl font-semibold text-gray-900">Add New Vendor</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
         </div>
-        <button onclick="document.getElementById('successAlert').style.display='none'" class="ml-4 text-green-700 hover:text-green-900">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-        </button>
-    </div>
-@endif
-
-<!-- Modal Add Vendor -->
-<div id="addVendorModal" class="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-40 @if($errors->any()) @else hidden @endif">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-lg mx-4 relative">
-        <!-- Modal Header -->
-        <div class="flex items-center justify-between px-8 pt-8 pb-4 border-b">
-            <h2 class="text-2xl font-bold">Add New Vendor</h2>
-            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-        <!-- Modal Body -->
-        <form id="addVendorForm" method="POST" action="{{ route('vendor.store') }}" class="px-8 pt-6 pb-4">
+        
+        <form id="vendorForm" method="POST" action="{{ route('vendor.store') }}">
             @csrf
-            <div class="mb-5">
-                <label for="vendor_company" class="block text-base font-semibold mb-2">Vendor Company <span class="text-red-500">*</span></label>
-                <input type="text" id="vendor_company" name="company" required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-                    placeholder="e.g., PT BERLIAN LINTAS TAMA" value="{{ old('company') }}">
-                @error('company')
-                    <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
-                @enderror
+            <div id="methodField"></div>
+            <div class="p-6 space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
+                        <input type="text" name="company" id="company" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            placeholder="e.g., PT Bunga Teratai">
+                        <p class="text-xs text-gray-500 mt-1">Enter the full company name</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Initials *</label>
+                        <input type="text" name="initials" id="initials" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                            placeholder="e.g., BT" maxlength="10">
+                        <p class="text-xs text-gray-500 mt-1">Company abbreviation (max 10 characters)</p>
+                    </div>
+                </div>
             </div>
-            <div class="mb-2">
-                <label for="vendor_initials" class="block text-base font-semibold mb-2">Initials <span class="text-red-500">*</span></label>
-                <input type="text" id="vendor_initials" name="initials" maxlength="5" required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 uppercase"
-                    placeholder="E.G., BLT" value="{{ old('initials') }}">
-                <p class="text-xs text-gray-500 mt-1">Maximum 5 characters</p>
-            </div>
-            <div class="flex justify-end gap-3 mt-8">
-                <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
-                <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold">Add Vendor</button>
+            
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3 rounded-b-xl">
+                <button type="button" onclick="closeModal()" 
+                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200 font-medium">
+                    Cancel
+                </button>
+                <button type="submit" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+                    <i class="fas fa-save mr-2"></i>
+                    Save Vendor
+                </button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+        <div class="text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Delete Vendor</h3>
+            <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete this vendor? This action cannot be undone.</p>
+            <div class="flex space-x-3">
+                <button onclick="closeDeleteModal()" 
+                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200">
+                    Cancel
+                </button>
+                <form id="deleteForm" method="POST" class="flex-1">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" 
+                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(session('success'))
+<div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between max-w-md w-full px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200 shadow-lg">
+    <div class="flex items-center">
+        <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span class="font-medium">{{ session('success') }}</span>
+    </div>
+    <button onclick="closeAlert()" class="ml-4 text-green-600 hover:text-green-800 transition-colors duration-200">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+</div>
+@endif
+
+<style>
+/* Custom styles untuk tampilan yang lebih menarik */
+.hover-card {
+    transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Success alert animation */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+#successAlert {
+    animation: slideInDown 0.3s ease-out;
+}
+
+/* Modal animation */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#vendorModal .bg-white {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+/* Table row hover effect */
+tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Button loading state */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .stats-card {
+        padding: 1rem;
+    }
+    
+    .table-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .table-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
 <script>
+// Modal functions
 function openAddModal() {
-    document.getElementById('addVendorModal').classList.remove('hidden');
+    document.getElementById('modalTitle').textContent = 'Add New Vendor';
+    document.getElementById('vendorForm').reset();
+    document.getElementById('methodField').innerHTML = '';
+    document.getElementById('vendorForm').action = '{{ route("vendor.store") }}';
+    document.getElementById('vendorModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // Focus on first input
     setTimeout(() => {
-        document.getElementById('vendor_company').focus();
-    }, 200);
+        document.getElementById('company').focus();
+    }, 100);
 }
+
+function editVendor(btn) {
+    document.getElementById('modalTitle').textContent = 'Edit Vendor';
+    document.getElementById('company').value = btn.getAttribute('data-company');
+    document.getElementById('initials').value = btn.getAttribute('data-initials');
+    document.getElementById('methodField').innerHTML = '@method("PUT")';
+    document.getElementById('vendorForm').action = `/ship-vendor-management/${btn.getAttribute('data-id')}`;
+    document.getElementById('vendorModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('company').focus();
+    }, 100);
+}
+
 function closeModal() {
-    document.getElementById('addVendorModal').classList.add('hidden');
+    document.getElementById('vendorModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
 }
-document.getElementById('vendor_initials').addEventListener('input', function(e) {
-    e.target.value = e.target.value.toUpperCase();
+
+function confirmDelete(id) {
+    const modal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Set the form action to the delete URL
+        deleteForm.action = `/ship-vendor-management/${id}`;
+    }
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    
+    searchInput.addEventListener('input', function() {
+        if (this.value) {
+            clearSearch.classList.remove('hidden');
+        } else {
+            clearSearch.classList.add('hidden');
+        }
+        filterTable();
+    });
+    
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+        this.classList.add('hidden');
+        filterTable();
+    });
+    
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeDeleteModal();
+        }
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('vendorModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
 });
+
+function filterTable() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#vendorsTable tbody tr');
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        if (!row.querySelector('.fas.fa-building.text-4xl')) { // Skip empty state row
+            const text = row.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+    
+    // Show/hide no results message
+    const emptyStateRow = document.querySelector('#vendorsTable tbody tr:has(.fas.fa-building.text-4xl)');
+    if (visibleCount === 0 && !emptyStateRow) {
+        // Create and show "no results" message
+        const tbody = document.querySelector('#vendorsTable tbody');
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.id = 'noResultsRow';
+        noResultsRow.innerHTML = `
+            <td colspan="3" class="px-6 py-12 text-center">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-search text-4xl text-gray-300 mb-3"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">No Results Found</h3>
+                    <p class="text-gray-500">Try adjusting your search criteria.</p>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(noResultsRow);
+    } else if (visibleCount > 0) {
+        // Remove "no results" message if it exists
+        const noResultsRow = document.getElementById('noResultsRow');
+        if (noResultsRow) {
+            noResultsRow.remove();
+        }
+    }
+}
+
+function closeAlert() {
+    const alert = document.getElementById('successAlert');
+    if (alert) {
+        alert.style.animation = 'slideOutUp 0.3s ease-in forwards';
+        setTimeout(() => {
+            alert.remove();
+        }, 300);
+    }
+}
+
+// Auto close notification
+document.addEventListener('DOMContentLoaded', function() {
+    const successAlert = document.getElementById('successAlert');
+    if (successAlert) {
+        setTimeout(() => {
+            closeAlert();
+        }, 5000);
+    }
+    
+    // Add form submission loading state
+    const form = document.getElementById('vendorForm');
+    form.addEventListener('submit', function() {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<i class="fas fa-spinner mr-2"></i>Saving...';
+    });
+    
+    // Validate initials input
+    document.getElementById('initials').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+});
+
+// Add slide out animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideOutUp {
+        from {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+    }
+`;
+document.head.appendChild(style);
 </script>
 @endsection

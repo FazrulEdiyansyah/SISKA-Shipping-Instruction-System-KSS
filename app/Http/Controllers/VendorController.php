@@ -28,4 +28,32 @@ class VendorController extends Controller
 
         return redirect()->route('vendor.index')->with('success', 'Vendor added successfully!');
     }
+    public function edit($id)
+    {
+        $vendor = \App\Models\Vendor::findOrFail($id);
+        return response()->json($vendor);
+    }
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'company' => 'required|string|max:255|unique:vendors,company,' . $id,
+            'initials' => 'required|string|max:5',
+        ]);
+
+        $vendor = Vendor::findOrFail($id);
+        $vendor->update([
+            'company' => $request->company,
+            'initials' => strtoupper($request->initials),
+        ]);
+
+        return redirect()->route('vendor.index')->with('success', 'Vendor updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $vendor = Vendor::findOrFail($id);
+        $vendor->delete();
+
+        return redirect()->route('vendor.index')->with('success', 'Vendor deleted successfully!');
+    }
 }

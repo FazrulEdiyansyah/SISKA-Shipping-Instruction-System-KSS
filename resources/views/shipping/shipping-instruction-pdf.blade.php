@@ -6,10 +6,10 @@
     <style>
         @page {
             size: A4;
-            margin: 1cm 1.6cm 1cm 2cm;
+            margin: 0.5cm 1.6cm 1cm 2cm;
         }
         body {
-            font-family: Verdana, Geneva, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             font-size: 15px;
             color: #222;
             line-height: 1.15;
@@ -50,7 +50,7 @@
         .main-table td {
             padding: 3px 6px 3px 0;
             vertical-align: top;
-            font-family: Verdana, Geneva, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             font-size: 15px;
             line-height: 1.5;
         }
@@ -75,11 +75,10 @@
         }
         .fixed-footer {
             position: fixed;
-            left: 0;
-            bottom: -0.5cm; /* Lewati margin bawah 1cm */
+            bottom: -0.3cm; /* Lewati margin bawah 1cm */
             width: 100%;
             color: #223A53;
-            font-size: 11px;
+            font-size: 10px;
             font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
             background: #fff;
             padding: 0;
@@ -90,7 +89,7 @@
         }
         .footer-table td {
             vertical-align: top;
-            padding-right: 20px;
+            /* padding-right: 20px; */ /* Hapus padding agar kolom lebih rapat */
         }
         /* Gambar dekorasi kanan */
         .right-decoration {
@@ -129,6 +128,26 @@
     </p>
 
     <table class="main-table">
+        @if($project_type === 'sts')
+        <tr>
+            <td class="label">Vessel Name</td>
+            <td>: {{ $vessel_name ?? '-' }}</td>
+        </tr>
+        <tr>
+            <td class="label">Vessel Arrived</td>
+            <td>
+                : 
+                @if(!empty($vessel_arrived))
+                    {{ \Carbon\Carbon::parse($vessel_arrived)->format('d F Y') }}
+                    @if(!empty($vessel_arrived_note))
+                        {{ $vessel_arrived_note }}
+                    @endif
+                @else
+                    -
+                @endif
+            </td>
+        </tr>
+        @endif
         <tr>
             <td class="label">Tugboat/Barge</td>
             <td class="value">: {{ $tugbarge ?? '-' }}</td>
@@ -146,7 +165,7 @@
             <td>: {{ $consignee ?? '-' }}</td>
         </tr>
         <tr>
-            <td class="label">Notify Address</td>
+            <td class="label">{{ $to === 'PT Bunga Teratai' ? 'Notify Party' : 'Notify Address' }}</td>
             <td>: {{ $notify_address ?? '-' }}</td>
         </tr>
         <tr>
@@ -181,23 +200,29 @@
     <p style="font-weight:bold; margin-top:-8px; margin-bottom:0; line-height:1;">PT KRAKATAU SAMUDERA SOLUSI</p>
     <br><br><br>
     <div class="signature-block">
-        <p class="signature-name">{{ $signed_by ?? '-' }}</p>
+        <p class="signature-name">{{ $signed_by_name ?? '-' }}</p>
         <p class="signature-pos">{{ $position ?? '-' }} {{ $department ?? '-' }}</p>
     </div>
 
     <div class="fixed-footer">
-        <table class="footer-table">
+        <table class="footer-table" style="width:auto;">
             <tr>
-                <td style="width:60%;">
-                    <span style="font-weight:bold; color:#223A53;">PT KRAKATAU SAMUDERA SOLUSI</span><br>
-                    <span style="font-weight:bold; color:#223A53;">KRAKATAU INTERNATIONAL PORT AREA / KBS PORT</span><br>
-                    <span style="color:#223A53;">JL. MAYJEND, S. PARMAN KM. 13, KEC. CIWANDAN<br>
-                    KOTA CILEGON, 42445, BANTEN - INDONESIA</span>
+                <td style="font-weight:bold; color:#223A53; vertical-align:top;">
+                    PT KRAKATAU SAMUDERA SOLUSI
                 </td>
-                <td style="width:40%;">
-                    <span style="font-weight:bold; color:#223A53;">JAKARTA OFFICE</span><br>
-                    <span style="color:#223A53;">KRAKATAU STEEL BUILDING 9<sup>TH</sup> FLOOR<br>
-                    JL. JEND, GATOT SUBROTO KAV. 54, JAKARTA SELATAN, 12950 - INDONESIA</span>
+            </tr>
+            <tr>
+                <td style="vertical-align:top;">
+                    <span style="font-weight:bold; color:#223A53;">Krakatau International Port Area / KBS Port</span><br>
+                    <span style="color:#555555;">Jl. Mayjend, S. Parman km. 13, Kec. Ciwandan<br>
+                    Kota Cilegon, 42445, Banten - Indonesia</span><br>
+                    <span style="font-weight:bold; color:#555555;">P</span> <span style="color:#555555;">+62 254 - 311121 (Hunting)</span>
+                </td>
+                <td style="vertical-align:top; padding-left:50px;">
+                    <span style="font-weight:bold; color:#223A53;">Jakarta Office</span><br>
+                    <span style="color:#555555;">Krakatau Steel Building 9<sup>th</sup> Floor<br>
+                    Jl. Jend, Gatot Subroto Kav. 54, Jakarta Selatan, 12950 - Indonesia</span><br>
+                    <span style="font-weight:bold; color:#555555;">P</span> <span style="color:#555555;">+62 21 - 5221249 (Hunting)</span>
                 </td>
             </tr>
         </table>

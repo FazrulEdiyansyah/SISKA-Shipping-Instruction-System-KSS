@@ -1,34 +1,27 @@
 @extends('layouts.app')
 
-@section('title', 'Shipping Instruction - SISKA')
-@section('page-title', 'Shipping Instruction')
-@section('page-subtitle', 'Create new shipping instruction document')
+@section('title', 'Edit Shipping Instruction - SISKA')
+@section('page-title', 'Edit Shipping Instruction')
+@section('page-subtitle', 'Update shipping instruction document details')
 
 @section('content')
 <div class="max-w-6xl mx-auto">
-    <!-- Header Section -->
-    <div class="bg-white rounded-xl shadow-sm mb-6">
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-xl font-bold text-gray-900">Create New Shipping Instruction</h3>
-                    <p class="text-sm text-gray-600 mt-1">Fill in the details below to generate shipping instruction document</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                    <span class="text-sm text-gray-600">Ready to Create</span>
-                </div>
-            </div>
-        </div>
+    <!-- Back Button -->
+    <div class="mb-6">
+        <a href="{{ route('shipping-instruction.detail', $si->id) }}" 
+           class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-sm">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Detail
+        </a>
     </div>
 
     <!-- Form Section -->
-    <form action="/shipping-instruction" method="POST" class="space-y-6">
+    <form method="POST" action="{{ route('shipping-instruction.update', $si->id) }}" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" name="number" value="" id="docNumberInput">
+        @method('PUT')
         
-        <!-- Document Information Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- Basic Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-file-alt text-blue-500 mr-2"></i>
@@ -37,33 +30,36 @@
                 <p class="text-sm text-gray-600 mt-1">Basic document identification details</p>
             </div>
             <div class="p-6">
-                <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Document Number (Read Only) -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Document Number</label>
+                        <input type="text" id="docNumberInput" name="number" value="{{ $si->number }}" readonly
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
+                        <p class="text-xs text-gray-500">Document number is auto-generated</p>
+                    </div>
+                    
                     <!-- Place & Date -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
                         <div class="flex gap-2">
-                            <input type="text" name="place"
+                            <input type="text" name="place" value="{{ $si->place }}"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="e.g., Cilegon" required
-                                value="{{ session('si_preview_data.place') ?? old('place') }}">
-                            <input type="date" name="date"
+                                placeholder="e.g., Cilegon" required>
+                            <input type="date" name="date" value="{{ $si->date }}"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                required
-                                value="{{ session('si_preview_data.date') ?? old('date') }}">
+                                required>
                         </div>
                         <p class="text-xs text-gray-500">Document issuance location and date</p>
                     </div>
-
+                    
                     <!-- Addressed To -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Addressed To *</label>
-                        <select name="to" id="vendorInput"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required>
-                            <option value="">-- Select Vendor --</option>
+                        <select name="to" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
                             @foreach($vendors as $vendor)
-                                <option value="{{ $vendor->company }}"
-                                    {{ (session('si_preview_data.to') ?? old('to')) == $vendor->company ? 'selected' : '' }}>
+                                <option value="{{ $vendor->company }}" {{ $si->to == $vendor->company ? 'selected' : '' }}>
                                     {{ $vendor->company }}
                                 </option>
                             @endforeach
@@ -73,9 +69,9 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Project Type Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+
+        <!-- Project Type -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-project-diagram text-blue-500 mr-2"></i>
@@ -86,22 +82,22 @@
             <div class="p-6">
                 <div class="flex gap-3">
                     <button type="button" id="projectDefaultBtn" 
-                            class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200 flex items-center gap-2">
+                            class="px-6 py-3 {{ ($si->project_type ?? 'default') === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2">
                         <i class="fas fa-ship"></i>
                         Default
                     </button>
                     <button type="button" id="projectSTSBtn" 
-                            class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition duration-200 flex items-center gap-2">
+                            class="px-6 py-3 {{ ($si->project_type ?? 'default') === 'sts' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200 flex items-center gap-2">
                         <i class="fas fa-exchange-alt"></i>
                         Ship To Ship
                     </button>
                 </div>
-                <input type="hidden" name="project_type" id="projectTypeInput" value="default">
+                <input type="hidden" name="project_type" id="projectTypeInput" value="{{ $si->project_type ?? 'default' }}">
             </div>
         </div>
 
-        <!-- Vessel Information Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- Vessel Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-ship text-blue-500 mr-2"></i>
@@ -111,34 +107,31 @@
             </div>
             <div class="p-6">
                 <!-- Field khusus untuk Ship To Ship -->
-                <div id="stsFields" style="display:none;" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div id="stsFields" style="display:{{ ($si->project_type ?? 'default') === 'sts' ? 'block' : 'none' }};" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                     <h5 class="text-md font-semibold text-blue-900 mb-4 flex items-center">
                         <i class="fas fa-anchor text-blue-600 mr-2"></i>
                         Ship To Ship Information
                     </h5>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-blue-800">Vessel Name *</label>
-                            <input type="text" name="vessel_name"
+                            <label class="block text-sm font-semibold text-blue-800">Vessel Name</label>
+                            <input type="text" name="vessel_name" value="{{ $si->vessel_name }}"
                                 class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                                placeholder="Enter vessel name"
-                                value="{{ session('si_preview_data.vessel_name') ?? old('vessel_name') }}">
+                                placeholder="Enter vessel name">
                             <p class="text-xs text-blue-600">Name of the receiving vessel</p>
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-blue-800">Vessel Arrived *</label>
+                            <label class="block text-sm font-semibold text-blue-800">Vessel Arrived</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <input type="date" name="vessel_arrived"
-                                        class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                                        value="{{ session('si_preview_data.vessel_arrived') ?? old('vessel_arrived') }}">
+                                    <input type="date" name="vessel_arrived" value="{{ $si->vessel_arrived }}"
+                                        class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                                     <p class="text-xs text-blue-600 mt-1">Arrival date</p>
                                 </div>
                                 <div>
-                                    <input type="text" name="vessel_arrived_note"
+                                    <input type="text" name="vessel_arrived_note" value="{{ $si->vessel_arrived_note }}"
                                         class="w-full px-4 py-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                                        placeholder="Additional notes (optional)"
-                                        value="{{ session('si_preview_data.vessel_arrived_note') ?? old('vessel_arrived_note') }}">
+                                        placeholder="Additional notes (optional)">
                                     <p class="text-xs text-blue-600 mt-1">Optional notes</p>
                                 </div>
                             </div>
@@ -150,26 +143,24 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Tugboat/Barge *</label>
-                        <input type="text" name="tugbarge"
+                        <input type="text" name="tugbarge" value="{{ $si->tugbarge }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required
-                            value="{{ session('si_preview_data.tugbarge') ?? old('tugbarge') }}">
+                            placeholder="e.g., TB. SARASWANTI 4 / BG. SARASWANTI 3" required>
                         <p class="text-xs text-gray-500">Vessel name and identification</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Flag State *</label>
-                        <input type="text" name="flag"
+                        <input type="text" name="flag" value="{{ $si->flag }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., Indonesia" required
-                            value="{{ session('si_preview_data.flag') ?? old('flag') }}">
+                            placeholder="e.g., Indonesia" required>
                         <p class="text-xs text-gray-500">Country of vessel registration</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Parties Information Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- Parties Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-users text-blue-500 mr-2"></i>
@@ -182,34 +173,34 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
-                            <input type="text" name="shipper"
+                            <input type="text" name="shipper" value="{{ $si->shipper }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="e.g., PT Dizamatra Powerindo" required
-                                value="{{ session('si_preview_data.shipper') ?? old('shipper') }}">
+                                placeholder="e.g., PT Dizamatra Powerindo" required>
                             <p class="text-xs text-gray-500">Company shipping the goods</p>
                         </div>
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
-                            <input type="text" name="consignee"
+                            <input type="text" name="consignee" value="{{ $si->consignee }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="e.g., To the order" required
-                                value="{{ session('si_preview_data.consignee') ?? old('consignee') }}">
+                                placeholder="e.g., To the order" required>
                             <p class="text-xs text-gray-500">Company receiving the goods</p>
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">Notify Address *</label>
+                        <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">
+                            {{ $si->to === 'PT Bunga Teratai' ? 'Notify Party *' : 'Notify Address *' }}
+                        </label>
                         <textarea name="notify_address" rows="3"
                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                  placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
+                                  placeholder="e.g., PLTU Palton Unit 7-8" required>{{ $si->notify_address }}</textarea>
                         <p class="text-xs text-gray-500">Complete address for notifications</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Port & Route Information Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- Port & Route Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>
@@ -221,26 +212,24 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Port of Loading *</label>
-                        <input type="text" name="port_loading"
+                        <input type="text" name="port_loading" value="{{ $si->port_loading }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., Jetty Patratani, Muara Enim, Indonesia" required
-                            value="{{ session('si_preview_data.port_loading') ?? old('port_loading') }}">
+                            placeholder="e.g., Jetty Patratani, Muara Enim, Indonesia" required>
                         <p class="text-xs text-gray-500">Port where cargo will be loaded</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Port of Discharging *</label>
-                        <input type="text" name="port_discharging"
+                        <input type="text" name="port_discharging" value="{{ $si->port_discharging }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., PLTU Palton Unit 7-8" required
-                            value="{{ session('si_preview_data.port_discharging') ?? old('port_discharging') }}">
+                            placeholder="e.g., PLTU Palton Unit 7-8" required>
                         <p class="text-xs text-gray-500">Port where cargo will be discharged</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Cargo Information Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- Cargo Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-boxes text-blue-500 mr-2"></i>
@@ -249,57 +238,138 @@
                 <p class="text-sm text-gray-600 mt-1">Details about the cargo being shipped</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Commodities *</label>
-                        <input type="text" name="commodities"
+                        <input type="text" name="commodities" value="{{ $si->commodities }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., Indonesian Steam Coal in Bulk" required
-                            value="{{ session('si_preview_data.commodities') ?? old('commodities') }}">
+                            placeholder="e.g., Indonesian Steam Coal in Bulk" required>
                         <p class="text-xs text-gray-500">Type of goods being shipped</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Quantity *</label>
-                        <input type="text" name="quantity"
+                        <input type="text" name="quantity" value="{{ $si->quantity }}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., 8.500 MT +/- 10%" required
-                            value="{{ session('si_preview_data.quantity') ?? old('quantity') }}">
+                            placeholder="e.g., 8.500 MT +/- 10%" required>
                         <p class="text-xs text-gray-500">Amount and measurement unit</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Schedule & Terms Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- Schedule Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
-                    Schedule & Terms
+                    Schedule Information
                 </h4>
-                <p class="text-sm text-gray-600 mt-1">Scheduling and additional terms information</p>
+                <p class="text-sm text-gray-600 mt-1">Scheduling and laycan period details</p>
             </div>
             <div class="p-6">
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
                     <div class="flex gap-2">
-                        <input type="date" name="laycan_start"
+                        <input type="date" name="laycan_start" value="{{ $si->laycan_start }}"
                             class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            required
-                            value="{{ session('si_preview_data.laycan_start') ?? old('laycan_start') }}">
+                            required>
                         <span class="flex items-center px-2">to</span>
-                        <input type="date" name="laycan_end"
+                        <input type="date" name="laycan_end" value="{{ $si->laycan_end }}"
                             class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            required
-                            value="{{ session('si_preview_data.laycan_end') ?? old('laycan_end') }}">
+                            required>
                     </div>
                     <p class="text-xs text-gray-500">Loading/discharge window period</p>
                 </div>
             </div>
         </div>
 
-        <!-- Signatory Section -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <!-- SPAL Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-file-invoice text-blue-500 mr-2"></i>
+                    SPAL Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Add SPAL details to complete the shipping instruction</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- SPAL Number -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">SPAL Number</label>
+                        <input type="text" name="spal_number" value="{{ $si->spal_number }}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., SPAL/001/2025">
+                        <p class="text-xs text-gray-500">Enter the SPAL document number</p>
+                    </div>
+                    
+                    <!-- Current SPAL Document -->
+                    @if($si->spal_document)
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Current SPAL Document</label>
+                        <div class="flex items-center space-x-3">
+                            <a href="{{ asset('storage/spal_documents/' . $si->spal_document) }}" target="_blank"
+                               class="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm hover:bg-blue-200 transition-colors duration-200">
+                                <i class="fas fa-file-pdf mr-2"></i>
+                                View Current SPAL
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                
+                <!-- Upload New SPAL Document -->
+                <div class="mt-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ $si->spal_document ? 'Replace SPAL Document' : 'Upload SPAL Document' }}
+                    </label>
+                    <input type="file" name="spal_document" accept=".pdf"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                    <p class="text-xs text-gray-500 mt-1">Upload PDF document (Max: 10MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MRA & RAB Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
+            <div class="p-6 border-b border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i class="fas fa-file-contract text-blue-500 mr-2"></i>
+                    MRA & RAB Information
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">Upload MRA & RAB document</p>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Current MRA & RAB Document -->
+                    @if($si->mra_rab_document)
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Current MRA & RAB Document</label>
+                        <div class="flex items-center space-x-3">
+                            <a href="{{ asset('storage/mra_rab_documents/' . $si->mra_rab_document) }}" target="_blank"
+                               class="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm hover:bg-blue-200 transition-colors duration-200">
+                                <i class="fas fa-file-pdf mr-2"></i>
+                                View Current MRA & RAB
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                
+                <!-- Upload New MRA & RAB Document -->
+                <div class="mt-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ $si->mra_rab_document ? 'Replace MRA & RAB Document' : 'Upload MRA & RAB Document' }}
+                    </label>
+                    <input type="file" name="mra_rab_document" accept=".pdf"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                    <p class="text-xs text-gray-500 mt-1">Upload PDF document (Max: 10MB)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signatory Information -->
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-signature text-blue-500 mr-2"></i>
@@ -311,44 +381,40 @@
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-gray-700">Signatory *</label>
                     <select name="signed_by" id="signatorySelect"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            required>
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
                         <option value="">-- Select Signatory --</option>
                         @foreach($signatories as $signatory)
                             <option value="{{ $signatory->id }}"
                                 data-position="{{ $signatory->position }}"
                                 data-department="{{ $signatory->department->name ?? '' }}"
-                                {{ (session('si_preview_data.signed_by') ?? old('signed_by')) == $signatory->id ? 'selected' : '' }}>
+                                {{ (old('signed_by', $si->signed_by) == $signatory->id) ? 'selected' : '' }}>
                                 {{ $signatory->name }}
                             </option>
                         @endforeach
                     </select>
                     <input type="hidden" name="position" id="signatoryPosition"
-                        value="{{ session('si_preview_data.position') ?? old('position') }}">
+                        value="{{ old('position', $si->position) }}">
                     <input type="hidden" name="department" id="signatoryDepartment"
-                        value="{{ session('si_preview_data.department') ?? old('department') }}">
+                        value="{{ old('department', $si->department) }}">
+                    <p class="text-xs text-gray-500">Select the person who will sign this document</p>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="bg-white rounded-xl shadow-sm">
+        <div class="bg-white rounded-xl shadow-sm mb-6">
             <div class="p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
                     <div class="flex items-center text-sm text-gray-600">
                         <i class="fas fa-info-circle text-blue-500 mr-2"></i>
-                        <span>All fields marked with (*) are required</span>
+                        <span>Complete SPAL information to change status to "Completed"</span>
                     </div>
-                    <div class="flex flex-wrap gap-4 justify-center">
-                        <button type="submit" formaction="/shipping-instruction/save"
-                            class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
+                    <div class="flex flex-wrap gap-4">
+                        <button type="submit"
+                            class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-lg">
                             <i class="fas fa-save mr-2"></i>
-                            Save
-                        </button>
-                        <button type="submit" formaction="/shipping-instruction/preview-data"
-                            class="px-8 py-3 bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
-                            <i class="fas fa-eye mr-2"></i>
-                            Preview
+                            Update Shipping Instruction
                         </button>
                     </div>
                 </div>
@@ -357,168 +423,16 @@
     </form>
 </div>
 
-{{-- Notifikasi sukses --}}
-@if(session('success'))
-    <div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between max-w-md w-full px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200 shadow-lg">
-        <div class="flex items-center">
-            <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="font-medium">{{ session('success') }}</span>
-        </div>
-        <button onclick="closeAlert()" class="ml-4 text-green-600 hover:text-green-800 transition-colors duration-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
-    </div>
-@endif
-
-@if(request()->has('from_preview'))
 <script>
-    // Hanya redirect jika user melakukan refresh (bukan saat kembali dari preview)
-    if (performance.navigation.type === 1 && window.location.search.includes('from_preview=1')) {
-        window.location.replace('/shipping-instruction');
-    }
-</script>
-@endif
-
-<style>
-/* Custom styles untuk form yang lebih profesional */
-.form-section {
-    transition: all 0.3s ease;
-}
-
-.form-section:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-input:focus, textarea:focus {
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.gradient-button {
-    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-}
-
-/* Animasi untuk notifikasi */
-@keyframes slideInDown {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -20px);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-}
-
-#successAlert {
-    animation: slideInDown 0.3s ease-out;
-}
-</style>
-
-<script>
-function closeAlert() {
-    const alert = document.getElementById('successAlert');
-    if (alert) {
-        alert.style.animation = 'slideOutUp 0.3s ease-in forwards';
-        setTimeout(() => {
-            alert.remove();
-        }, 300);
-    }
-}
-
-// Auto close notifikasi setelah 5 detik
 document.addEventListener('DOMContentLoaded', function() {
-    const successAlert = document.getElementById('successAlert');
-    if (successAlert) {
-        setTimeout(() => {
-            closeAlert();
-        }, 5000);
-    }
-
-    const vendorInput = document.getElementById('vendorInput');
+    const vendorInput = document.querySelector('select[name="to"]');
     const docNumberInput = document.getElementById('docNumberInput');
+    const notifyLabel = document.getElementById('notifyLabel');
     const signatorySelect = document.getElementById('signatorySelect');
     const signatoryPosition = document.getElementById('signatoryPosition');
     const signatoryDepartment = document.getElementById('signatoryDepartment');
     
-    if(signatorySelect) {
-        signatorySelect.addEventListener('change', function() {
-            const selected = signatorySelect.options[signatorySelect.selectedIndex];
-            signatoryPosition.value = selected.getAttribute('data-position') || '';
-            signatoryDepartment.value = selected.getAttribute('data-department') || '';
-        });
-    }
-
-    vendorInput.addEventListener('blur', function() {
-        const vendor = vendorInput.value;
-        if (vendor.length > 0) {
-            fetch('/shipping-instruction/generate-number', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ vendor })
-            })
-            .then(res => res.json())
-            .then(data => {
-                docNumberInput.value = data.document_number;
-            });
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('input', function() {
-            // No preview button, so nothing to update here
-        });
-    }
-});
-
-// Tambah animasi slide out
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideOutUp {
-        from {
-            opacity: 1;
-            transform: translate(-50%, 0);
-        }
-        to {
-            opacity: 0;
-            transform: translate(-50%, -20px);
-        }
-    }
-`;
-document.head.appendChild(style);
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const vendorInput = document.getElementById('vendorInput');
-    const bungaTerataiFields = document.getElementById('bungaTerataiFields');
-    const notifyLabel = document.getElementById('notifyLabel');
-    
-    function toggleBungaTerataiFields() {
-        if (vendorInput.value === 'PT Bunga Teratai') {
-            bungaTerataiFields.style.display = '';
-            notifyLabel.textContent = 'Notify Party *';
-        } else {
-            bungaTerataiFields.style.display = 'none';
-            notifyLabel.textContent = 'Notify Address *';
-        }
-    }
-    
-    vendorInput.addEventListener('change', toggleBungaTerataiFields);
-    toggleBungaTerataiFields(); // initial load
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+    // Project type functionality
     const projectDefaultBtn = document.getElementById('projectDefaultBtn');
     const projectSTSBtn = document.getElementById('projectSTSBtn');
     const projectTypeInput = document.getElementById('projectTypeInput');
@@ -535,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
             projectDefaultBtn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
             
             // Show STS fields
-            stsFields.style.display = '';
+            stsFields.style.display = 'block';
         } else {
             // Default button active
             projectDefaultBtn.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
@@ -562,6 +476,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial state
     updateProjectButtons(projectTypeInput.value);
+
+    // Signatory change handler
+    if(signatorySelect) {
+        signatorySelect.addEventListener('change', function() {
+            const selected = signatorySelect.options[signatorySelect.selectedIndex];
+            signatoryPosition.value = selected.getAttribute('data-position') || '';
+            signatoryDepartment.value = selected.getAttribute('data-department') || '';
+        });
+    }
+
+    // Toggle notify label based on vendor
+    function toggleNotifyLabel() {
+        if (vendorInput.value === 'PT Bunga Teratai') {
+            notifyLabel.textContent = 'Notify Party *';
+        } else {
+            notifyLabel.textContent = 'Notify Address *';
+        }
+    }
+    
+    if (vendorInput) {
+        vendorInput.addEventListener('change', toggleNotifyLabel);
+        toggleNotifyLabel(); // initial load
+    }
+
+    // Document number update functionality
+    if (vendorInput && docNumberInput) {
+        vendorInput.addEventListener('change', function() {
+            const vendor = vendorInput.value;
+            if (vendor.length > 0) {
+                // Ambil nomor SI lama
+                const oldNumber = docNumberInput.value;
+                // Ambil 3 digit urut, bulan, tahun dari nomor lama
+                const match = oldNumber.match(/^(\d{3})\/SI\/KSS-[^\/]+\/([IVXLCDM]+)\/(\d{4})$/);
+                if (match) {
+                    const urut = match[1];
+                    const bulan = match[2];
+                    const tahun = match[3];
+                    // Hitung inisial vendor baru
+                    fetch('/shipping-instruction/generate-number', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ vendor })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Ambil inisial dari hasil endpoint
+                        const docNum = data.document_number;
+                        const inisialMatch = docNum.match(/^(\d{3})\/SI\/KSS-([^\/]+)\/([IVXLCDM]+)\/(\d{4})$/);
+                        if (inisialMatch) {
+                            const inisial = inisialMatch[2];
+                            // Gabungkan urut lama + inisial baru + bulan & tahun lama
+                            docNumberInput.value = `${urut}/SI/KSS-${inisial}/${bulan}/${tahun}`;
+                        }
+                    });
+                }
+            }
+        });
+    }
 });
 </script>
 @endsection
