@@ -27,14 +27,10 @@ class ReportController extends Controller
         $dateFrom = $request->date_from;
         $dateTo = $request->date_to;
         $selectedColumns = $request->columns ?? ['number', 'date', 'to', 'status'];
-
-        // Query data berdasarkan periode tanggal
         $shippingInstructions = ShippingInstruction::with(['signatory'])
             ->whereBetween('date', [$dateFrom, $dateTo])
             ->orderBy('date', 'asc')
             ->get();
-
-        // Hitung periode untuk judul laporan
         $periodText = $this->getPeriodText($dateFrom, $dateTo);
 
         return view('report.show', [
@@ -69,7 +65,6 @@ class ReportController extends Controller
                 'pageSettings' => $pageSettings
             ]);
 
-            // Terapkan ukuran & orientasi kertas
             $pdf->setPaper(
                 $pageSettings['paper_size'] ?? 'A4',
                 $pageSettings['orientation'] ?? 'portrait'
@@ -78,7 +73,6 @@ class ReportController extends Controller
             return $pdf->download('laporan-shipping-instruction.pdf');
         }
 
-        // Excel export akan diimplementasi nanti
         return response()->json(['message' => 'Excel export belum tersedia'], 501);
     }
 
@@ -102,7 +96,6 @@ class ReportController extends Controller
             'pageSettings' => $pageSettings
         ]);
 
-        // Terapkan ukuran & orientasi kertas
         $pdf->setPaper(
             $pageSettings['paper_size'] ?? 'A4',
             $pageSettings['orientation'] ?? 'portrait'

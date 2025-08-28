@@ -65,14 +65,8 @@ class ShippingInstructionController extends Controller
     {
         $si = ShippingInstruction::findOrFail($id);
 
-        // ...validasi dan update field lain...
-
-        // Handle SPAL document (sudah ada)
-        // ...existing code...
-
-        // Handle MRA & RAB document
         if ($request->hasFile('mra_rab_document')) {
-            // Hapus file lama jika ada
+
             if ($si->mra_rab_document && Storage::exists('public/mra_rab_documents/' . $si->mra_rab_document)) {
                 Storage::delete('public/mra_rab_documents/' . $si->mra_rab_document);
             }
@@ -82,9 +76,7 @@ class ShippingInstructionController extends Controller
             $si->mra_rab_document = $fileName;
         }
 
-        // ...update field lain...
         $si->save();
 
-        // ...redirect/response...
     }
 }

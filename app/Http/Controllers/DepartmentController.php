@@ -23,8 +23,6 @@ class DepartmentController extends Controller
     public function destroy($id)
     {
         $department = Department::findOrFail($id);
-        
-        // Check if department has signatories
         if ($department->signatories()->count() > 0) {
             return redirect()->back()->with('error', 'Cannot delete department that has signatories assigned.');
         }
