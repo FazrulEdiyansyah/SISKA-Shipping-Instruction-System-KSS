@@ -16,12 +16,12 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
                     <button onclick="openAddDepartmentModal()" 
-                        class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition duration-200 flex items-center justify-center">
+                        class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center shadow-sm">
                         <i class="fas fa-building mr-2"></i>
                         Add Department
                     </button>
                     <button onclick="openAddModal()" 
-                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition duration-200 flex items-center justify-center">
+                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center shadow-sm">
                         <i class="fas fa-user-plus mr-2"></i>
                         Add Signatory
                     </button>
@@ -33,7 +33,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <!-- Total Signatories -->
-        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-blue-100 text-sm font-medium">Total Signatories</p>
@@ -47,7 +47,7 @@
         </div>
         
         <!-- Total Departments -->
-        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-green-100 text-sm font-medium">Total Departments</p>
@@ -112,7 +112,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($signatories as $signatory)
-                            <tr class="hover:bg-gray-50 transition duration-200">
+                            <tr class="hover:bg-gray-50 transition-colors duration-200">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
@@ -124,7 +124,7 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">{{ $signatory->name }}</div>
-                                            <div class="text-sm text-gray-500">Added {{ $signatory->created_at->format('d M Y') }}</div>
+                                            <div class="text-xs text-gray-500 mt-0.5">Added {{ $signatory->created_at->format('d M Y') }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -149,15 +149,15 @@
                                             data-name="{{ $signatory->name }}"
                                             data-position="{{ $signatory->position }}"
                                             data-department="{{ $signatory->department_id ?? '' }}"
-                                            class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition duration-200 border border-blue-200"
+                                            class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors duration-200 border border-blue-200"
                                             title="Edit Signatory">
-                                            <i class="fas fa-edit mr-1"></i>
+                                            <i class="fas fa-edit mr-1.5"></i>
                                             Edit
                                         </button>
                                         <button onclick="confirmDeleteSignatory({{ $signatory->id }})" 
-                                            class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-medium rounded-lg hover:bg-red-100 transition duration-200 border border-red-200"
+                                            class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-medium rounded-lg hover:bg-red-100 transition-colors duration-200 border border-red-200"
                                             title="Delete Signatory">
-                                            <i class="fas fa-trash mr-1"></i>
+                                            <i class="fas fa-trash mr-1.5"></i>
                                             Delete
                                         </button>
                                     </div>
@@ -169,9 +169,9 @@
                                     <div class="flex flex-col items-center">
                                         <i class="fas fa-users text-4xl text-gray-300 mb-3"></i>
                                         <h3 class="text-lg font-medium text-gray-900 mb-1">No Signatories Found</h3>
-                                        <p class="text-gray-500">Get started by adding your first signatory.</p>
+                                        <p class="text-gray-500 mb-4">Get started by adding your first signatory.</p>
                                         <button onclick="openAddModal()" 
-                                            class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
                                             <i class="fas fa-plus mr-2"></i>
                                             Add Signatory
                                         </button>
@@ -198,14 +198,14 @@
                 <div class="p-6">
                     <div class="space-y-3 max-h-96 overflow-y-auto">
                         @forelse($departments as $department)
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
                             <div class="flex items-center">
                                 <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                                     <i class="fas fa-building text-green-600 text-sm"></i>
                                 </div>
                                 <div>
                                     <div class="text-sm font-medium text-gray-900">{{ $department->name }}</div>
-                                    <div class="text-xs text-gray-500">
+                                    <div class="text-xs text-gray-500 mt-0.5">
                                         {{ $signatories->where('department_id', $department->id)->count() }} signatory(s)
                                     </div>
                                 </div>
@@ -221,9 +221,9 @@
                         @empty
                         <div class="text-center py-8">
                             <i class="fas fa-building text-3xl text-gray-300 mb-3"></i>
-                            <p class="text-gray-500 text-sm">No departments found</p>
+                            <p class="text-gray-500 text-sm mb-3">No departments found</p>
                             <button onclick="openAddDepartmentModal()" 
-                                class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 text-sm">
+                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 text-sm font-medium">
                                 <i class="fas fa-plus mr-1"></i>
                                 Add Department
                             </button>
@@ -242,7 +242,7 @@
         <div class="p-6 border-b border-gray-200">
             <div class="flex items-center justify-between">
                 <h3 id="modalTitle" class="text-xl font-semibold text-gray-900">Add New Signatory</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition duration-200">
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -252,15 +252,16 @@
             @csrf
             <div id="methodField"></div>
             <div class="p-6 space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Full Name *</label>
                     <input type="text" id="fullName" name="full_name" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
                         placeholder="e.g., Miftahul A.N. Basori">
+                    <p class="text-xs text-gray-500">Enter the full name of the signatory</p>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Position *</label>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Position *</label>
                     <select id="position" name="position" onchange="toggleDepartmentField()" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
                         <option value="">Select Position</option>
@@ -271,10 +272,11 @@
                         <option value="Direktur">Direktur</option>
                         <option value="Direktur Utama">Direktur Utama</option>
                     </select>
+                    <p class="text-xs text-gray-500">Select the organizational position</p>
                 </div>
                 
-                <div id="departmentField">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                <div id="departmentField" class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">
                         Department <span class="text-red-500" id="departmentRequired">*</span>
                     </label>
                     <select id="department" name="department"
@@ -284,16 +286,17 @@
                             <option value="{{ $department->id }}">{{ $department->name }}</option>
                         @endforeach
                     </select>
+                    <p class="text-xs text-gray-500">Department assignment (not required for Directors)</p>
                 </div>
             </div>
             
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3 rounded-b-xl">
                 <button type="button" onclick="closeModal()" 
-                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition duration-200 font-medium">
+                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200 font-medium">
                     Cancel
                 </button>
                 <button type="submit" 
-                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
                     <i class="fas fa-save mr-2"></i>
                     Save Signatory
                 </button>
@@ -308,7 +311,7 @@
         <div class="p-6 border-b border-gray-200">
             <div class="flex items-center justify-between">
                 <h3 class="text-xl font-semibold text-gray-900">Add New Department</h3>
-                <button onclick="closeDepartmentModal()" class="text-gray-400 hover:text-gray-600 transition duration-200">
+                <button onclick="closeDepartmentModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -317,21 +320,22 @@
         <form id="departmentForm" method="POST" action="{{ route('departments.store') }}">
             @csrf
             <div class="p-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Department Name *</label>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Department Name *</label>
                     <input type="text" id="departmentName" name="department_name" required
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
                         placeholder="e.g., Human Resources">
+                    <p class="text-xs text-gray-500">Enter the name of the new department</p>
                 </div>
             </div>
             
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3 rounded-b-xl">
                 <button type="button" onclick="closeDepartmentModal()" 
-                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition duration-200 font-medium">
+                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200 font-medium">
                     Cancel
                 </button>
                 <button type="submit" 
-                    class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 font-medium">
+                    class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium">
                     <i class="fas fa-save mr-2"></i>
                     Save Department
                 </button>
@@ -351,14 +355,14 @@
             <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete this signatory? This action cannot be undone.</p>
             <div class="flex space-x-3">
                 <button onclick="closeDeleteSignatoryModal()" 
-                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
+                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200">
                     Cancel
                 </button>
                 <form id="deleteSignatoryForm" method="POST" class="flex-1">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
-                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
                         Delete
                     </button>
                 </form>
@@ -378,14 +382,14 @@
             <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete this department? This action cannot be undone.</p>
             <div class="flex space-x-3">
                 <button onclick="closeDeleteDepartmentModal()" 
-                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
+                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200">
                     Cancel
                 </button>
                 <form id="deleteDepartmentForm" method="POST" class="flex-1">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
-                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
                         Delete
                     </button>
                 </form>
@@ -600,7 +604,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function closeAlert() {
     const alert = document.getElementById('successAlert');
     if (alert) {
-        alert.remove();
+        alert.style.animation = 'slideOutUp 0.3s ease-in forwards';
+        setTimeout(() => {
+            alert.remove();
+        }, 300);
     }
 }
 
@@ -613,5 +620,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 });
+
+// Add slide out animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideOutUp {
+        from {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+    }
+`;
+document.head.appendChild(style);
 </script>
 @endsection

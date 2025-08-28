@@ -32,7 +32,13 @@
                     <span class="font-medium text-sm">Shipping Instruction</span>
                 </a>
                 
-                <a href="/shipping-instruction-overview" class="flex items-center px-4 py-2.5 {{ request()->is('shipping-instruction-overview*') ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' }}">
+                <a href="/shipping-instruction-overview" class="flex items-center px-4 py-2.5 {{ 
+                    request()->is('shipping-instruction-overview') || 
+                    request()->is('shipping-instruction-preview/*') || 
+                    request()->is('shipping-instruction-edit/*') 
+                    ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' 
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50' 
+                }}">
                     <i class="fas fa-table w-4 h-4 mr-2"></i>
                     <span class="font-medium text-sm">SI Overview</span>
                 </a>

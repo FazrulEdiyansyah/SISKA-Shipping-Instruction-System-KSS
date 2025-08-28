@@ -86,9 +86,9 @@ class ShippingInstructionEditController extends Controller
             $mraRabDocument = $fileName;
         }
 
-        // Determine completed_at based on SPAL data
+        // Determine completed_at based on SPAL & MRA RAB data
         $completedAt = null;
-        if ($request->spal_number && $spalDocument) {
+        if ($request->spal_number && $spalDocument && $mraRabDocument) {
             $completedAt = now();
         }
 

@@ -37,7 +37,7 @@
                 <p class="text-sm text-gray-600 mt-1">Basic document identification details</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 gap-6">
+                <div class="space-y-6">
                     <!-- Place & Date -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
@@ -74,8 +74,8 @@
             </div>
         </div>
         
-        <!-- Pilihan Project -->
-        <div class="bg-white rounded-xl shadow-sm mb-6">
+        <!-- Project Type Section -->
+        <div class="bg-white rounded-xl shadow-sm">
             <div class="p-6 border-b border-gray-200">
                 <h4 class="text-lg font-semibold text-gray-900 flex items-center">
                     <i class="fas fa-project-diagram text-blue-500 mr-2"></i>
@@ -178,30 +178,32 @@
                 <p class="text-sm text-gray-600 mt-1">Shipper, consignee, and notification details</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
-                        <input type="text" name="shipper"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., PT Dizamatra Powerindo" required
-                            value="{{ session('si_preview_data.shipper') ?? old('shipper') }}">
-                        <p class="text-xs text-gray-500">Company shipping the goods</p>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
+                            <input type="text" name="shipper"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="e.g., PT Dizamatra Powerindo" required
+                                value="{{ session('si_preview_data.shipper') ?? old('shipper') }}">
+                            <p class="text-xs text-gray-500">Company shipping the goods</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
+                            <input type="text" name="consignee"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="e.g., To the order" required
+                                value="{{ session('si_preview_data.consignee') ?? old('consignee') }}">
+                            <p class="text-xs text-gray-500">Company receiving the goods</p>
+                        </div>
                     </div>
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
-                        <input type="text" name="consignee"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., To the order" required
-                            value="{{ session('si_preview_data.consignee') ?? old('consignee') }}">
-                        <p class="text-xs text-gray-500">Company receiving the goods</p>
+                        <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">Notify Address *</label>
+                        <textarea name="notify_address" rows="3"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                  placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
+                        <p class="text-xs text-gray-500">Complete address for notifications</p>
                     </div>
-                </div>
-                <div class="space-y-2">
-                    <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">Notify Address *</label>
-                    <textarea name="notify_address" rows="3"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                              placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
-                    <p class="text-xs text-gray-500">Complete address for notifications</p>
                 </div>
             </div>
         </div>
@@ -278,22 +280,20 @@
                 <p class="text-sm text-gray-600 mt-1">Scheduling and additional terms information</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
-                        <div class="flex gap-2">
-                            <input type="date" name="laycan_start"
-                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                required
-                                value="{{ session('si_preview_data.laycan_start') ?? old('laycan_start') }}">
-                            <span class="flex items-center px-2">to</span>
-                            <input type="date" name="laycan_end"
-                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                required
-                                value="{{ session('si_preview_data.laycan_end') ?? old('laycan_end') }}">
-                        </div>
-                        <p class="text-xs text-gray-500">Loading/discharge window period</p>
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
+                    <div class="flex gap-2">
+                        <input type="date" name="laycan_start"
+                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required
+                            value="{{ session('si_preview_data.laycan_start') ?? old('laycan_start') }}">
+                        <span class="flex items-center px-2">to</span>
+                        <input type="date" name="laycan_end"
+                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required
+                            value="{{ session('si_preview_data.laycan_end') ?? old('laycan_end') }}">
                     </div>
+                    <p class="text-xs text-gray-500">Loading/discharge window period</p>
                 </div>
             </div>
         </div>
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({ vendor })
             })
             .then(res => res.json())
-            .then data => {
+            .then(data => {
                 docNumberInput.value = data.document_number;
             });
         }

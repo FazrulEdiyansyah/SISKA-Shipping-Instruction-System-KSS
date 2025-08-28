@@ -23,48 +23,48 @@
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Total Shipping Instructions -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
                         <i class="fas fa-file-alt text-blue-600 text-lg"></i>
                     </div>
                 </div>
-                <div class="ml-4">
+                <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-gray-600">Total Shipping Instructions</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($totalShippingInstructions) }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($totalShippingInstructions) }}</p>
                     <p class="text-xs text-gray-500 mt-1">All documents</p>
                 </div>
             </div>
         </div>
 
         <!-- Completed Shipping Instructions -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
                         <i class="fas fa-check-circle text-green-600 text-lg"></i>
                     </div>
                 </div>
-                <div class="ml-4">
+                <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-gray-600">Completed Shipping Instructions</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($completedShippingInstructions) }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($completedShippingInstructions) }}</p>
                     <p class="text-xs text-gray-500 mt-1">With SPAL documents</p>
                 </div>
             </div>
         </div>
 
         <!-- Total Vendors -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center">
                         <i class="fas fa-anchor text-purple-600 text-lg"></i>
                     </div>
                 </div>
-                <div class="ml-4">
+                <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-gray-600">Total Vendors</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($totalVendors) }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($totalVendors) }}</p>
                     <p class="text-xs text-gray-500 mt-1">Registered vendors</p>
                 </div>
             </div>
@@ -85,15 +85,15 @@
                     <p class="text-sm text-gray-500 mt-1">Common tasks</p>
                 </div>
                 <div class="p-6">
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <a href="/shipping-instruction" 
                            class="group flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200">
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-blue-200 transition-colors duration-200">
                                 <i class="fas fa-plus text-blue-600"></i>
                             </div>
-                            <div>
+                            <div class="flex-1">
                                 <p class="font-semibold text-gray-900 group-hover:text-blue-700">Create New SI</p>
-                                <p class="text-xs text-gray-500">Generate document</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Generate document</p>
                             </div>
                         </a>
 
@@ -102,9 +102,9 @@
                             <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-green-200 transition-colors duration-200">
                                 <i class="fas fa-table text-green-600"></i>
                             </div>
-                            <div>
+                            <div class="flex-1">
                                 <p class="font-semibold text-gray-900 group-hover:text-green-700">Manage SI</p>
-                                <p class="text-xs text-gray-500">View & edit documents</p>
+                                <p class="text-xs text-gray-500 mt-0.5">View & edit documents</p>
                             </div>
                         </a>
 
@@ -113,9 +113,9 @@
                             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-purple-200 transition-colors duration-200">
                                 <i class="fas fa-anchor text-purple-600"></i>
                             </div>
-                            <div>
+                            <div class="flex-1">
                                 <p class="font-semibold text-gray-900 group-hover:text-purple-700">Manage Vendors</p>
-                                <p class="text-xs text-gray-500">Add or edit vendors</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Add or edit vendors</p>
                             </div>
                         </a>
 
@@ -124,9 +124,9 @@
                             <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-indigo-200 transition-colors duration-200">
                                 <i class="fas fa-chart-bar text-indigo-600"></i>
                             </div>
-                            <div>
+                            <div class="flex-1">
                                 <p class="font-semibold text-gray-900 group-hover:text-indigo-700">Generate Reports</p>
-                                <p class="text-xs text-gray-500">Create reports</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Create reports</p>
                             </div>
                         </a>
                     </div>
@@ -147,7 +147,7 @@
                             <p class="text-sm text-gray-500 mt-1">Latest document activities</p>
                         </div>
                         <a href="/shipping-instruction-overview" 
-                           class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center">
+                           class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center transition-colors duration-200">
                             View All 
                             <i class="fas fa-arrow-right ml-1"></i>
                         </a>
@@ -175,7 +175,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900">{{ $doc->number }}</div>
-                                            <div class="text-xs text-gray-500">{{ Str::limit($doc->tugbarge, 25) }}</div>
+                                            <div class="text-xs text-gray-500 mt-0.5">{{ Str::limit($doc->tugbarge, 25) }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ Str::limit($doc->to, 30) }}</div>
@@ -183,20 +183,20 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($doc->completed_at)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    <i class="fas fa-check-circle mr-1"></i>
+                                                    <i class="fas fa-check-circle mr-1.5"></i>
                                                     Completed
                                                 </span>
                                             @else
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    <i class="fas fa-clock mr-1"></i>
+                                                    <i class="fas fa-clock mr-1.5"></i>
                                                     Incomplete
                                                 </span>
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <a href="{{ url('/shipping-instruction-preview/'.$doc->id) }}" 
-                                               class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium rounded-lg transition-colors duration-200">
-                                                <i class="fas fa-eye mr-1"></i>
+                                               class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm font-medium rounded-lg transition-colors duration-200">
+                                                <i class="fas fa-eye mr-1.5"></i>
                                                 View
                                             </a>
                                         </td>

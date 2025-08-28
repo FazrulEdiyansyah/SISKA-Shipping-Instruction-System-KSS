@@ -16,12 +16,12 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Stats Card -->
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl px-4 py-2 text-center">
-                        <div class="text-lg font-bold text-blue-600">{{ $vendors->count() }}</div>
-                        <div class="text-blue-700 text-sm">Total Vendors</div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl px-6 py-3 text-center">
+                        <div class="text-xl font-bold text-blue-600">{{ $vendors->count() }}</div>
+                        <div class="text-blue-700 text-sm font-medium">Total Vendors</div>
                     </div>
                     <button onclick="openAddModal()" 
-                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
+                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-lg">
                         <i class="fas fa-plus mr-2"></i>
                         Add New Vendor
                     </button>
@@ -41,7 +41,7 @@
                        placeholder="Search by company name or initials..." 
                        class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200">
                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <button id="clearSearch" class="text-gray-400 hover:text-gray-600 hidden">
+                    <button id="clearSearch" class="text-gray-400 hover:text-gray-600 transition-colors duration-200 hidden">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -56,6 +56,7 @@
                 <i class="fas fa-building text-blue-500 mr-2"></i>
                 Vendor List
             </h4>
+            <p class="text-sm text-gray-600 mt-1">All registered shipping vendors and their details</p>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full" id="vendorsTable">
@@ -67,14 +68,14 @@
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             Initials
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($vendors as $vendor)
-                    <tr class="hover:bg-gray-50 transition duration-200">
+                    <tr class="hover:bg-gray-50 transition-colors duration-200">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-10 w-10">
@@ -84,29 +85,30 @@
                                 </div>
                                 <div class="ml-4">
                                     <div class="text-sm font-medium text-gray-900">{{ $vendor->company }}</div>
+                                    <div class="text-xs text-gray-500 mt-0.5">Shipping Company</div>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
                                 {{ $vendor->initials }}
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center justify-center space-x-2">
                                 <button onclick="editVendor(this)" 
                                     data-company="{{ $vendor->company }}"
                                     data-initials="{{ $vendor->initials }}"
                                     data-id="{{ $vendor->id }}"
-                                    class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition duration-200 border border-blue-200"
+                                    class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors duration-200 border border-blue-200"
                                     title="Edit Vendor">
-                                    <i class="fas fa-edit mr-1"></i>
+                                    <i class="fas fa-edit mr-1.5"></i>
                                     Edit
                                 </button>
                                 <button onclick="confirmDelete({{ $vendor->id }})" 
-                                    class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-medium rounded-lg hover:bg-red-100 transition duration-200 border border-red-200"
+                                    class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-medium rounded-lg hover:bg-red-100 transition-colors duration-200 border border-red-200"
                                     title="Delete Vendor">
-                                    <i class="fas fa-trash mr-1"></i>
+                                    <i class="fas fa-trash mr-1.5"></i>
                                     Delete
                                 </button>
                             </div>
@@ -118,9 +120,9 @@
                             <div class="flex flex-col items-center">
                                 <i class="fas fa-building text-4xl text-gray-300 mb-3"></i>
                                 <h3 class="text-lg font-medium text-gray-900 mb-1">No Vendors Found</h3>
-                                <p class="text-gray-500">Get started by adding your first vendor.</p>
+                                <p class="text-gray-500 mb-4">Get started by adding your first vendor.</p>
                                 <button onclick="openAddModal()" 
-                                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
                                     <i class="fas fa-plus mr-2"></i>
                                     Add Vendor
                                 </button>
@@ -140,7 +142,7 @@
         <div class="p-6 border-b border-gray-200">
             <div class="flex items-center justify-between">
                 <h3 id="modalTitle" class="text-xl font-semibold text-gray-900">Add New Vendor</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition duration-200">
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -156,23 +158,25 @@
                         <input type="text" name="company" id="company" required
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
                             placeholder="e.g., PT Bunga Teratai">
+                        <p class="text-xs text-gray-500 mt-1">Enter the full company name</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Initials *</label>
                         <input type="text" name="initials" id="initials" required
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                            placeholder="e.g., BT">
+                            placeholder="e.g., BT" maxlength="10">
+                        <p class="text-xs text-gray-500 mt-1">Company abbreviation (max 10 characters)</p>
                     </div>
                 </div>
             </div>
             
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3 rounded-b-xl">
                 <button type="button" onclick="closeModal()" 
-                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition duration-200 font-medium">
+                    class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200 font-medium">
                     Cancel
                 </button>
                 <button type="submit" 
-                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
                     <i class="fas fa-save mr-2"></i>
                     Save Vendor
                 </button>
@@ -192,14 +196,14 @@
             <p class="text-sm text-gray-500 mb-6">Are you sure you want to delete this vendor? This action cannot be undone.</p>
             <div class="flex space-x-3">
                 <button onclick="closeDeleteModal()" 
-                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
+                        class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-200">
                     Cancel
                 </button>
                 <form id="deleteForm" method="POST" class="flex-1">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
-                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
                         Delete
                     </button>
                 </form>
@@ -255,6 +259,69 @@
 #successAlert {
     animation: slideInDown 0.3s ease-out;
 }
+
+/* Modal animation */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#vendorModal .bg-white {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+/* Table row hover effect */
+tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Button loading state */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .stats-card {
+        padding: 1rem;
+    }
+    
+    .table-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .table-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}
 </style>
 
 <script>
@@ -266,6 +333,11 @@ function openAddModal() {
     document.getElementById('vendorForm').action = '{{ route("vendor.store") }}';
     document.getElementById('vendorModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('company').focus();
+    }, 100);
 }
 
 function editVendor(btn) {
@@ -276,6 +348,11 @@ function editVendor(btn) {
     document.getElementById('vendorForm').action = `/ship-vendor-management/${btn.getAttribute('data-id')}`;
     document.getElementById('vendorModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('company').focus();
+    }, 100);
 }
 
 function closeModal() {
@@ -322,26 +399,79 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.add('hidden');
         filterTable();
     });
+    
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeDeleteModal();
+        }
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('vendorModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
 });
 
 function filterTable() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const rows = document.querySelectorAll('#vendorsTable tbody tr');
+    let visibleCount = 0;
     
     rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
+        if (!row.querySelector('.fas.fa-building.text-4xl')) { // Skip empty state row
+            const text = row.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
         }
     });
+    
+    // Show/hide no results message
+    const emptyStateRow = document.querySelector('#vendorsTable tbody tr:has(.fas.fa-building.text-4xl)');
+    if (visibleCount === 0 && !emptyStateRow) {
+        // Create and show "no results" message
+        const tbody = document.querySelector('#vendorsTable tbody');
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.id = 'noResultsRow';
+        noResultsRow.innerHTML = `
+            <td colspan="3" class="px-6 py-12 text-center">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-search text-4xl text-gray-300 mb-3"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">No Results Found</h3>
+                    <p class="text-gray-500">Try adjusting your search criteria.</p>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(noResultsRow);
+    } else if (visibleCount > 0) {
+        // Remove "no results" message if it exists
+        const noResultsRow = document.getElementById('noResultsRow');
+        if (noResultsRow) {
+            noResultsRow.remove();
+        }
+    }
 }
 
 function closeAlert() {
     const alert = document.getElementById('successAlert');
     if (alert) {
-        alert.remove();
+        alert.style.animation = 'slideOutUp 0.3s ease-in forwards';
+        setTimeout(() => {
+            alert.remove();
+        }, 300);
     }
 }
 
@@ -353,6 +483,35 @@ document.addEventListener('DOMContentLoaded', function() {
             closeAlert();
         }, 5000);
     }
+    
+    // Add form submission loading state
+    const form = document.getElementById('vendorForm');
+    form.addEventListener('submit', function() {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<i class="fas fa-spinner mr-2"></i>Saving...';
+    });
+    
+    // Validate initials input
+    document.getElementById('initials').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
 });
+
+// Add slide out animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideOutUp {
+        from {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+    }
+`;
+document.head.appendChild(style);
 </script>
 @endsection

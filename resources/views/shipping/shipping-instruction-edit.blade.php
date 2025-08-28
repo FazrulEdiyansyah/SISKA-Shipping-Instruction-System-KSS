@@ -7,9 +7,9 @@
 @section('content')
 <div class="max-w-6xl mx-auto">
     <!-- Back Button -->
-    <div class="mb-4">
+    <div class="mb-6">
         <a href="{{ route('shipping-instruction.detail', $si->id) }}" 
-           class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition duration-200 font-medium shadow-sm">
+           class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-sm">
             <i class="fas fa-arrow-left mr-2"></i>
             Back to Detail
         </a>
@@ -27,6 +27,7 @@
                     <i class="fas fa-file-alt text-blue-500 mr-2"></i>
                     Document Information
                 </h4>
+                <p class="text-sm text-gray-600 mt-1">Basic document identification details</p>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -35,6 +36,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Document Number</label>
                         <input type="text" id="docNumberInput" name="number" value="{{ $si->number }}" readonly
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
+                        <p class="text-xs text-gray-500">Document number is auto-generated</p>
                     </div>
                     
                     <!-- Place & Date -->
@@ -42,25 +44,27 @@
                         <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
                         <div class="flex gap-2">
                             <input type="text" name="place" value="{{ $si->place }}"
-                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 placeholder="e.g., Cilegon" required>
                             <input type="date" name="date" value="{{ $si->date }}"
-                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 required>
                         </div>
+                        <p class="text-xs text-gray-500">Document issuance location and date</p>
                     </div>
                     
                     <!-- Addressed To -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Addressed To *</label>
                         <select name="to" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
                             @foreach($vendors as $vendor)
                                 <option value="{{ $vendor->company }}" {{ $si->to == $vendor->company ? 'selected' : '' }}>
                                     {{ $vendor->company }}
                                 </option>
                             @endforeach
                         </select>
+                        <p class="text-xs text-gray-500">Company or organization name</p>
                     </div>
                 </div>
             </div>
@@ -78,12 +82,12 @@
             <div class="p-6">
                 <div class="flex gap-3">
                     <button type="button" id="projectDefaultBtn" 
-                            class="px-6 py-3 {{ ($si->project_type ?? 'default') === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg font-medium hover:bg-blue-700 transition duration-200 flex items-center gap-2">
+                            class="px-6 py-3 {{ ($si->project_type ?? 'default') === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2">
                         <i class="fas fa-ship"></i>
                         Default
                     </button>
                     <button type="button" id="projectSTSBtn" 
-                            class="px-6 py-3 {{ ($si->project_type ?? 'default') === 'sts' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg font-medium hover:bg-gray-300 transition duration-200 flex items-center gap-2">
+                            class="px-6 py-3 {{ ($si->project_type ?? 'default') === 'sts' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }} rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200 flex items-center gap-2">
                         <i class="fas fa-exchange-alt"></i>
                         Ship To Ship
                     </button>
@@ -165,30 +169,32 @@
                 <p class="text-sm text-gray-600 mt-1">Shipper, consignee, and notification details</p>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
-                        <input type="text" name="shipper" value="{{ $si->shipper }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., PT Dizamatra Powerindo" required>
-                        <p class="text-xs text-gray-500">Company shipping the goods</p>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-700">Shipper *</label>
+                            <input type="text" name="shipper" value="{{ $si->shipper }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="e.g., PT Dizamatra Powerindo" required>
+                            <p class="text-xs text-gray-500">Company shipping the goods</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
+                            <input type="text" name="consignee" value="{{ $si->consignee }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                placeholder="e.g., To the order" required>
+                            <p class="text-xs text-gray-500">Company receiving the goods</p>
+                        </div>
                     </div>
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Consignee *</label>
-                        <input type="text" name="consignee" value="{{ $si->consignee }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            placeholder="e.g., To the order" required>
-                        <p class="text-xs text-gray-500">Company receiving the goods</p>
+                        <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">
+                            {{ $si->to === 'PT Bunga Teratai' ? 'Notify Party *' : 'Notify Address *' }}
+                        </label>
+                        <textarea name="notify_address" rows="3"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                  placeholder="e.g., PLTU Palton Unit 7-8" required>{{ $si->notify_address }}</textarea>
+                        <p class="text-xs text-gray-500">Complete address for notifications</p>
                     </div>
-                </div>
-                <div class="space-y-2">
-                    <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">
-                        {{ $si->to === 'PT Bunga Teratai' ? 'Notify Party *' : 'Notify Address *' }}
-                    </label>
-                    <textarea name="notify_address" rows="3"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                              placeholder="e.g., PLTU Palton Unit 7-8" required>{{ $si->notify_address }}</textarea>
-                    <p class="text-xs text-gray-500">Complete address for notifications</p>
                 </div>
             </div>
         </div>
@@ -229,20 +235,23 @@
                     <i class="fas fa-boxes text-blue-500 mr-2"></i>
                     Cargo Information
                 </h4>
+                <p class="text-sm text-gray-600 mt-1">Details about the cargo being shipped</p>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Commodities *</label>
                         <input type="text" name="commodities" value="{{ $si->commodities }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                             placeholder="e.g., Indonesian Steam Coal in Bulk" required>
+                        <p class="text-xs text-gray-500">Type of goods being shipped</p>
                     </div>
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Quantity *</label>
                         <input type="text" name="quantity" value="{{ $si->quantity }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                             placeholder="e.g., 8.500 MT +/- 10%" required>
+                        <p class="text-xs text-gray-500">Amount and measurement unit</p>
                     </div>
                 </div>
             </div>
@@ -255,19 +264,21 @@
                     <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
                     Schedule Information
                 </h4>
+                <p class="text-sm text-gray-600 mt-1">Scheduling and laycan period details</p>
             </div>
             <div class="p-6">
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-gray-700">Laycan Period *</label>
-                    <div class="flex items-center gap-2">
+                    <div class="flex gap-2">
                         <input type="date" name="laycan_start" value="{{ $si->laycan_start }}"
-                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                             required>
                         <span class="flex items-center px-2">to</span>
                         <input type="date" name="laycan_end" value="{{ $si->laycan_end }}"
-                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                             required>
                     </div>
+                    <p class="text-xs text-gray-500">Loading/discharge window period</p>
                 </div>
             </div>
         </div>
@@ -287,7 +298,7 @@
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">SPAL Number</label>
                         <input type="text" name="spal_number" value="{{ $si->spal_number }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                             placeholder="e.g., SPAL/001/2025">
                         <p class="text-xs text-gray-500">Enter the SPAL document number</p>
                     </div>
@@ -298,7 +309,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Current SPAL Document</label>
                         <div class="flex items-center space-x-3">
                             <a href="{{ asset('storage/spal_documents/' . $si->spal_document) }}" target="_blank"
-                               class="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm hover:bg-blue-200">
+                               class="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm hover:bg-blue-200 transition-colors duration-200">
                                 <i class="fas fa-file-pdf mr-2"></i>
                                 View Current SPAL
                             </a>
@@ -313,7 +324,7 @@
                         {{ $si->spal_document ? 'Replace SPAL Document' : 'Upload SPAL Document' }}
                     </label>
                     <input type="file" name="spal_document" accept=".pdf"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
                     <p class="text-xs text-gray-500 mt-1">Upload PDF document (Max: 10MB)</p>
                 </div>
             </div>
@@ -336,7 +347,7 @@
                         <label class="block text-sm font-semibold text-gray-700">Current MRA & RAB Document</label>
                         <div class="flex items-center space-x-3">
                             <a href="{{ asset('storage/mra_rab_documents/' . $si->mra_rab_document) }}" target="_blank"
-                               class="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm hover:bg-blue-200">
+                               class="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-800 rounded-lg text-sm hover:bg-blue-200 transition-colors duration-200">
                                 <i class="fas fa-file-pdf mr-2"></i>
                                 View Current MRA & RAB
                             </a>
@@ -351,7 +362,7 @@
                         {{ $si->mra_rab_document ? 'Replace MRA & RAB Document' : 'Upload MRA & RAB Document' }}
                     </label>
                     <input type="file" name="mra_rab_document" accept=".pdf"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
                     <p class="text-xs text-gray-500 mt-1">Upload PDF document (Max: 10MB)</p>
                 </div>
             </div>
@@ -386,6 +397,7 @@
                         value="{{ old('position', $si->position) }}">
                     <input type="hidden" name="department" id="signatoryDepartment"
                         value="{{ old('department', $si->department) }}">
+                    <p class="text-xs text-gray-500">Select the person who will sign this document</p>
                 </div>
             </div>
         </div>
@@ -400,7 +412,7 @@
                     </div>
                     <div class="flex flex-wrap gap-4">
                         <button type="submit"
-                            class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition duration-200 font-medium shadow-lg">
+                            class="px-8 py-3 bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg transition-colors duration-200 font-medium shadow-lg">
                             <i class="fas fa-save mr-2"></i>
                             Update Shipping Instruction
                         </button>
@@ -416,6 +428,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const vendorInput = document.querySelector('select[name="to"]');
     const docNumberInput = document.getElementById('docNumberInput');
     const notifyLabel = document.getElementById('notifyLabel');
+    const signatorySelect = document.getElementById('signatorySelect');
+    const signatoryPosition = document.getElementById('signatoryPosition');
+    const signatoryDepartment = document.getElementById('signatoryDepartment');
     
     // Project type functionality
     const projectDefaultBtn = document.getElementById('projectDefaultBtn');
@@ -461,6 +476,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial state
     updateProjectButtons(projectTypeInput.value);
+
+    // Signatory change handler
+    if(signatorySelect) {
+        signatorySelect.addEventListener('change', function() {
+            const selected = signatorySelect.options[signatorySelect.selectedIndex];
+            signatoryPosition.value = selected.getAttribute('data-position') || '';
+            signatoryDepartment.value = selected.getAttribute('data-department') || '';
+        });
+    }
 
     // Toggle notify label based on vendor
     function toggleNotifyLabel() {

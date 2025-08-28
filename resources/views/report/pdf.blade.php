@@ -330,7 +330,6 @@
         <div class="summary-content">
             <strong>Total Dokumen:</strong> {{ $reports->count() }} shipping instruction<br>
             <strong>Dokumen Completed:</strong> {{ $reports->where('spal_number', '!=', null)->where('spal_document', '!=', null)->where('mra_rab_document', '!=', null)->count() }} dokumen<br>
-            <strong>Only SI:</strong> {{ $reports->where('completed_at', null)->count() }} dokumen<br>
             <strong>Incomplete:</strong> {{ $reports->where(function($row) { return empty($row->spal_number) || empty($row->spal_document) || empty($row->mra_rab_document); })->count() }} dokumen<br>
             <strong>Tanggal Cetak:</strong> {{ \Carbon\Carbon::now()->format('d F Y') }}
         </div>
