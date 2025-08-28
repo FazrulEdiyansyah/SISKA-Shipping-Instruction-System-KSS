@@ -90,7 +90,6 @@ Route::get('/shipping-instruction-preview/download', function () {
     $data = session('si_preview_data');
     if (!$data) return redirect('/shipping-instruction')->with('error', 'No data to download');
     $data = ShippingInstruction::prepareData($data);
-    // Simpan ke database jika belum ada
     if (empty($data['id'])) {
         ShippingInstruction::create($data);
     }
@@ -98,11 +97,9 @@ Route::get('/shipping-instruction-preview/download', function () {
     return $pdf->download('shipping-instruction.pdf');
 });
 
-// Edit routes pakai controller
 Route::get('/shipping-instruction-edit/{id}', [\App\Http\Controllers\ShippingInstructionEditController::class, 'edit'])->name('shipping-instruction.edit');
 Route::put('/shipping-instruction-update/{id}', [\App\Http\Controllers\ShippingInstructionEditController::class, 'update'])->name('shipping-instruction.update');
 
-// Detail route
 Route::get('/shipping-instruction-preview/{id}', function($id) {
     $si = \App\Models\ShippingInstruction::with('signatory.department')->findOrFail($id);
     $data = \App\Models\ShippingInstruction::prepareFromModel($si);
@@ -117,7 +114,6 @@ Route::delete('/shipping-instruction-delete/{id}', function ($id) {
 
 Route::get('/shipping-instruction-overview', [ShippingInstructionController::class, 'index']);
 
-// Tambahkan route ini
 Route::get('/shipping-instruction/{id}/pdf', function ($id) {
     $si = \App\Models\ShippingInstruction::findOrFail($id);
     $data = \App\Models\ShippingInstruction::prepareFromModel($si);
@@ -131,10 +127,8 @@ Route::get('/report/download', [ReportController::class, 'download'])->name('rep
 Route::get('/report/columns', [ReportController::class, 'getAvailableColumns'])->name('report.columns');
 Route::get('/report/preview-pdf', [ReportController::class, 'previewPdf'])->name('report.preview-pdf');
 
-// Signatory routes - edit, update, delete
 Route::get('/signatories/{id}/edit', [SignatoryController::class, 'edit']);
 Route::put('/signatories/{id}', [SignatoryController::class, 'update']);
 Route::delete('/signatories/{id}', [SignatoryController::class, 'destroy']);
 
-// Department routes - delete only (sesuai permintaan)
 Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
