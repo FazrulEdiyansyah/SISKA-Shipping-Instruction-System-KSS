@@ -261,17 +261,17 @@
                 @foreach($selectedColumns as $col)
                     <th>
                         @switch($col)
-                            @case('date') Tanggal @break
-                            @case('number') No. Dokumen @break
-                            @case('to') Pemasok @break
-                            @case('tugbarge') Tugboat/Barge @break
+                            @case('date') Date @break
+                            @case('number') SI Number @break
+                            @case('to') Vendor @break
+                            @case('tugbarge') Vessel Name @break
                             @case('shipper') Shipper @break
-                            @case('commodities') Komoditas @break
-                            @case('quantity') Kuantitas @break
+                            @case('commodities') Commodity @break
+                            @case('quantity') Quantity @break
                             @case('laycan') Laycan @break
-                            @case('port_loading') Pelabuhan Muat @break
-                            @case('port_discharging') Pelabuhan Bongkar @break
-                            @case('spal_number') No. SPAL @break
+                            @case('port_loading') POL @break
+                            @case('port_discharging') POD @break
+                            @case('spal_number') SPAL Number @break
                             @case('status') Status @break
                             @default {{ ucfirst(str_replace('_', ' ', $col)) }}
                         @endswitch
