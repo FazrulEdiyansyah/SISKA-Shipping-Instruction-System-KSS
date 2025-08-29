@@ -49,7 +49,7 @@
                 <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-gray-600">Completed Shipping Instructions</p>
                     <p class="text-2xl font-bold text-gray-900 mt-1">{{ number_format($completedShippingInstructions) }}</p>
-                    <p class="text-xs text-gray-500 mt-1">With SPAL documents</p>
+                    <p class="text-xs text-gray-500 mt-1">With MRA & RAB and SPAL documents</p>
                 </div>
             </div>
         </div>
