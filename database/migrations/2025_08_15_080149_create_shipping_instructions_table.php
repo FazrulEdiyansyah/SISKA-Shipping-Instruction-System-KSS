@@ -36,6 +36,9 @@ return new class extends Migration
             $table->string('project_type')->default('default');
             $table->string('mra_number')->nullable();
             $table->string('mra_rab_document')->nullable();
+            $table->string('spal_number')->nullable();
+            $table->string('spal_document')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }
