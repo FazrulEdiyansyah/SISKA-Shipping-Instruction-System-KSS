@@ -48,12 +48,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('shipping_instructions', function (Blueprint $table) {
-            $table->dropColumn('vessel_arrived_note');
-            $table->dropColumn('project_type');
-            $table->dropColumn('mra_number');
-        });
-
         Schema::dropIfExists('shipping_instructions');
     }
 };
