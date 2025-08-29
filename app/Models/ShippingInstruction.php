@@ -18,6 +18,7 @@ class ShippingInstruction extends Model
         'signed_by', 'remarks',
         'spal_number', 'spal_document',
         'mra_rab_document',
+        'mra_number',
         'completed_at',
         'project_type',
     ];
@@ -31,16 +32,13 @@ class ShippingInstruction extends Model
         return self::orderBy('created_at', 'desc')->paginate(10);
     }
 
-    // Method untuk mengecek status berdasarkan SPAL
     public function getStatusAttribute()
     {
-        // Completed jika SPAL dan MRA & RAB sudah ada
         if (
             $this->spal_number && $this->spal_document && $this->mra_rab_document
         ) {
             return 'Completed';
         }
-        // Incomplete jika salah satu/belum ada dokumen
         return 'Incomplete';
     }
 
@@ -97,12 +95,10 @@ class ShippingInstruction extends Model
         return '-';
     }
 
-    // Helper untuk data dari model (database)
     public static function prepareFromModel(self $si)
     {
         $data = $si->toArray();
-        
-        // Ambil data signatory jika ada
+
         if ($si->signatory) {
             $data['signed_by'] = $si->signatory->name;
             $data['signed_by_name'] = $si->signatory->name;
@@ -115,30 +111,25 @@ class ShippingInstruction extends Model
             $data['department'] = '-';
         }
         
-        return self::prepareData($data, true); // Pass true untuk indicate ini dari model (edit mode)
+        return self::prepareData($data, true);
     }
 
     public static function prepareData($input, $isFromModel = false)
     {
         $data = $input;
-        
-        // Nomor SI - hanya generate jika belum ada dan bukan dari model (untuk create baru)
+
         if (!$isFromModel && empty($data['number']) && !empty($data['to'])) {
             $vendor = \App\Models\Vendor::where('company', $data['to'])->first();
             $initials = $vendor ? $vendor->initials : 'XXX';
             $data['number'] = self::generateNextNumber($initials);
         }
-        
-        // Laycan
+
         $data['laycan'] = self::formatLaycan($data['laycan_start'] ?? null, $data['laycan_end'] ?? null);
-        
-        // Place date
+
         $data['place_date'] = ($data['place'] ?? '') . ', ' . (\Carbon\Carbon::parse($data['date'] ?? now())->format('d F Y'));
-        
-        // Remarks
+
         $data['remarks'] = 'Freight Payable as Per Charter Party (SPAL)';
-        
-        // Tambahkan info signatory untuk kebutuhan tampilan (tidak untuk insert DB)
+
         if (!empty($data['signed_by']) && is_numeric($data['signed_by'])) {
             $signatoryData = self::getSignatoryData($data['signed_by']);
             $data = array_merge($data, $signatoryData);

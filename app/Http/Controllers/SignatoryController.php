@@ -14,7 +14,6 @@ class SignatoryController extends Controller
             'position' => 'required|string|max:255',
         ];
         
-        // Department only required if not Direktur or Direktur Utama
         if (!in_array($request->position, ['Direktur', 'Direktur Utama'])) {
             $rules['department'] = 'required|exists:departments,id';
         }
@@ -43,7 +42,6 @@ class SignatoryController extends Controller
             'position' => 'required|string|max:255',
         ];
         
-        // Department only required if not Direktur or Direktur Utama
         if (!in_array($request->position, ['Direktur', 'Direktur Utama'])) {
             $rules['department'] = 'required|exists:departments,id';
         }

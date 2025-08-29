@@ -52,11 +52,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Kolom Table (Opsional) - Bisa dihapus jika tidak diperlukan -->
-    <!-- <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-        ...existing table code...
-    </div> -->
 </div>
 
 <!-- Modal Modifikasi Kolom -->

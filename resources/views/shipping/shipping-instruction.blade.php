@@ -12,7 +12,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-xl font-bold text-gray-900">Create New Shipping Instruction</h3>
-                    <p class="text-sm text-gray-600 mt-1">Fill in the details below to generate shipping instruction document</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        Fill in the details below to generate shipping instruction document
+                    </p>
                 </div>
                 <div class="flex items-center space-x-2">
                     <div class="w-3 h-3 bg-green-400 rounded-full"></div>
@@ -26,7 +28,7 @@
     <form action="/shipping-instruction" method="POST" class="space-y-6">
         @csrf
         <input type="hidden" name="number" value="" id="docNumberInput">
-        
+
         <!-- Document Information Section -->
         <div class="bg-white rounded-xl shadow-sm">
             <div class="p-6 border-b border-gray-200">
@@ -38,42 +40,49 @@
             </div>
             <div class="p-6">
                 <div class="space-y-6">
+                    <!-- MRA Number -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">MRA Number *</label>
+                        <input type="text" name="mra_number"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter MRA Number" required
+                            value="{{ session('si_preview_data.mra_number') ?? old('mra_number') }}">
+                        <p class="text-xs text-gray-500">Memo Realisasi Anggaran Number</p>
+                    </div>
                     <!-- Place & Date -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-700">Place & Date Document *</label>
+                        <label class="block text-sm font-semibold text-gray-700">Date Document *</label>
                         <div class="flex gap-2">
-                            <input type="text" name="place"
-                                class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                placeholder="e.g., Cilegon" required
-                                value="{{ session('si_preview_data.place') ?? old('place') }}">
+                            <input type="hidden" name="place" value="Cilegon">
+                            <span class="inline-flex items-center px-3 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">Cilegon</span>
                             <input type="date" name="date"
                                 class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
                                 required
                                 value="{{ session('si_preview_data.date') ?? old('date') }}">
                         </div>
-                        <p class="text-xs text-gray-500">Document issuance location and date</p>
+                        <p class="text-xs text-gray-500">
+                            Document issuance location is always <b>Cilegon</b>. Please select the date.
+                        </p>
                     </div>
-
                     <!-- Addressed To -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Addressed To *</label>
-                        <select name="to" id="vendorInput"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required>
-                            <option value="">-- Select Vendor --</option>
+                        <select id="vendor_select" name="to" required>
+                            <option value="">-- Search Vendor --</option>
                             @foreach($vendors as $vendor)
-                                <option value="{{ $vendor->company }}"
+                                <option value="{{ $vendor->company }}" 
+                                    data-initials="{{ $vendor->initials }}"
                                     {{ (session('si_preview_data.to') ?? old('to')) == $vendor->company ? 'selected' : '' }}>
                                     {{ $vendor->company }}
                                 </option>
                             @endforeach
                         </select>
-                        <p class="text-xs text-gray-500">Company or organization name</p>
+                        <p class="text-xs text-gray-500">Search existing vendor or type custom company name</p>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- Project Type Section -->
         <div class="bg-white rounded-xl shadow-sm">
             <div class="p-6 border-b border-gray-200">
@@ -86,17 +95,15 @@
             <div class="p-6">
                 <div class="flex gap-3">
                     <button type="button" id="projectDefaultBtn" 
-                            class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200 flex items-center gap-2">
-                        <i class="fas fa-ship"></i>
-                        Default
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2">
+                        Long Towing
                     </button>
                     <button type="button" id="projectSTSBtn" 
-                            class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition duration-200 flex items-center gap-2">
-                        <i class="fas fa-exchange-alt"></i>
+                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200 flex items-center gap-2">
                         Ship To Ship
                     </button>
                 </div>
-                <input type="hidden" name="project_type" id="projectTypeInput" value="default">
+                <input type="hidden" name="project_type" id="projectTypeInput" value="long_towing">
             </div>
         </div>
 
@@ -200,8 +207,8 @@
                     <div class="space-y-2">
                         <label id="notifyLabel" class="block text-sm font-semibold text-gray-700">Notify Address *</label>
                         <textarea name="notify_address" rows="3"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                                  placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="e.g., PLTU Palton Unit 7-8" required>{{ session('si_preview_data.notify_address') ?? old('notify_address') }}</textarea>
                         <p class="text-xs text-gray-500">Complete address for notifications</p>
                     </div>
                 </div>
@@ -311,8 +318,8 @@
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-gray-700">Signatory *</label>
                     <select name="signed_by" id="signatorySelect"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-                            required>
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
                         <option value="">-- Select Signatory --</option>
                         @foreach($signatories as $signatory)
                             <option value="{{ $signatory->id }}"
@@ -357,6 +364,83 @@
     </form>
 </div>
 
+<!-- Tom Select CDN -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Tom Select for vendor search
+    const vendorSelect = new TomSelect('#vendor_select', {
+        plugins: ['remove_button'],
+        persist: false,
+        create: true,
+        createOnBlur: true,
+        maxItems: 1,
+        placeholder: 'Search Vendor',
+        openOnFocus: false,
+        shouldOpen: function() {
+            return this.control_input.value.length > 0;
+        },
+        create: function(input) {
+            return {
+                value: input,
+                text: input
+            };
+        },
+        render: {
+            option: function(data, escape) {
+                return '<div class="vendor-option px-3 py-2 hover:bg-blue-50 cursor-pointer rounded transition-colors duration-150">' +
+                    '<div class="font-medium text-gray-900">' + escape(data.text) + '</div>' +
+                    (data.initials ? '<div class="text-xs text-gray-500">' + escape(data.initials) + '</div>' : '') +
+                '</div>';
+            },
+            item: function(data, escape) {
+                return '<div>' + escape(data.text) + '</div>';
+            }
+        }
+    });
+
+    // Handle vendor selection and generate document number
+    vendorSelect.on('change', function(value) {
+        if (value) {
+            // Generate document number when vendor is selected
+            fetch('/shipping-instruction/generate-number', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ vendor: value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.document_number) {
+                    document.getElementById('docNumberInput').value = data.document_number;
+                }
+            })
+            .catch(error => {
+                console.error('Error generating document number:', error);
+            });
+
+            // Update notify label based on vendor
+            const notifyLabel = document.getElementById('notifyLabel');
+            if (value === 'PT Bunga Teratai') {
+                notifyLabel.textContent = 'Notify Party *';
+            } else {
+                notifyLabel.textContent = 'Notify Address *';
+            }
+        }
+    });
+
+    vendorSelect.on('type', function(str) {
+        if (!str.length) {
+            vendorSelect.close();
+        }
+    });
+});
+</script>
+
 {{-- Notifikasi sukses --}}
 @if(session('success'))
     <div id="successAlert" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between max-w-md w-full px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200 shadow-lg">
@@ -384,24 +468,19 @@
 @endif
 
 <style>
-/* Custom styles untuk form yang lebih profesional */
 .form-section {
     transition: all 0.3s ease;
 }
-
 .form-section:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
-
 input:focus, textarea:focus {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
-
 .gradient-button {
     background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
 }
-
 /* Animasi untuk notifikasi */
 @keyframes slideInDown {
     from {
@@ -413,9 +492,28 @@ input:focus, textarea:focus {
         transform: translate(-50%, 0);
     }
 }
-
 #successAlert {
     animation: slideInDown 0.3s ease-out;
+}
+/* Tom Select custom styling */
+.ts-control {
+    border: 1px solid #d1d5db !important;
+    border-radius: 0.5rem !important;
+    padding: 0.75rem 1rem !important;
+    min-height: 3rem !important;
+    font-size: 0.875rem !important;
+}
+.ts-control:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+.ts-dropdown {
+    border: 1px solid #d1d5db !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+.vendor-option:hover {
+    background-color: #dbeafe !important;
 }
 </style>
 
@@ -444,37 +542,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const signatorySelect = document.getElementById('signatorySelect');
     const signatoryPosition = document.getElementById('signatoryPosition');
     const signatoryDepartment = document.getElementById('signatoryDepartment');
-    
-    if(signatorySelect) {
+
+    if (signatorySelect) {
         signatorySelect.addEventListener('change', function() {
             const selected = signatorySelect.options[signatorySelect.selectedIndex];
             signatoryPosition.value = selected.getAttribute('data-position') || '';
             signatoryDepartment.value = selected.getAttribute('data-department') || '';
-        });
-    }
-
-    vendorInput.addEventListener('blur', function() {
-        const vendor = vendorInput.value;
-        if (vendor.length > 0) {
-            fetch('/shipping-instruction/generate-number', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ vendor })
-            })
-            .then(res => res.json())
-            .then(data => {
-                docNumberInput.value = data.document_number;
-            });
-        }
-    });
-
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('input', function() {
-            // No preview button, so nothing to update here
         });
     }
 });
@@ -501,7 +574,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const vendorInput = document.getElementById('vendorInput');
     const bungaTerataiFields = document.getElementById('bungaTerataiFields');
     const notifyLabel = document.getElementById('notifyLabel');
-    
+
     function toggleBungaTerataiFields() {
         if (vendorInput.value === 'PT Bunga Teratai') {
             bungaTerataiFields.style.display = '';
@@ -511,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
             notifyLabel.textContent = 'Notify Address *';
         }
     }
-    
+
     vendorInput.addEventListener('change', toggleBungaTerataiFields);
     toggleBungaTerataiFields(); // initial load
 });
@@ -522,6 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectDefaultBtn = document.getElementById('projectDefaultBtn');
     const projectSTSBtn = document.getElementById('projectSTSBtn');
     const projectTypeInput = document.getElementById('projectTypeInput');
+    projectTypeInput.value = 'long_towing';
     const stsFields = document.getElementById('stsFields');
 
     function updateProjectButtons(selectedType) {

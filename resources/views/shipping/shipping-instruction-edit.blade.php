@@ -341,6 +341,15 @@
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- MRA Number -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">MRA Number *</label>
+                        <input type="text" name="mra_number" value="{{ old('mra_number', $si->mra_number) }}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            placeholder="Enter MRA Number" required>
+                        <p class="text-xs text-gray-500">Memo Realisasi Anggaran Number</p>
+                    </div>
+
                     <!-- Current MRA & RAB Document -->
                     @if($si->mra_rab_document)
                     <div class="space-y-2">

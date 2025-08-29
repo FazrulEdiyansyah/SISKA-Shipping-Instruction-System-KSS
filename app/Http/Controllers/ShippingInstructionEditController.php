@@ -23,7 +23,6 @@ class ShippingInstructionEditController extends Controller
     {
         $si = ShippingInstruction::findOrFail($id);
 
-        // Validasi
         $request->validate([
             'to' => 'required|string',
             'tugbarge' => 'required|string',
@@ -44,14 +43,11 @@ class ShippingInstructionEditController extends Controller
             'spal_document' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
-        // Cek apakah vendor berubah
         $vendorChanged = $request->to !== $si->to;
 
-        // Ambil inisial vendor baru
         $vendor = \App\Models\Vendor::where('company', $request->to)->first();
         $initials = $vendor ? $vendor->initials : 'XXX';
 
-        // Jika vendor berubah, update nomor SI dengan inisial baru, urutan tetap
         $newNumber = $si->number;
         if ($vendorChanged) {
             if (preg_match('/^(\d{3})\/SI\/KSS-[^\/]+\/([IVXLCDM]+)\/(\d{4})$/', $si->number, $matches)) {
@@ -62,7 +58,6 @@ class ShippingInstructionEditController extends Controller
             }
         }
 
-        // Handle SPAL document upload
         $spalDocument = $si->spal_document;
         if ($request->hasFile('spal_document')) {
             if ($si->spal_document && Storage::exists('public/spal_documents/' . $si->spal_document)) {
@@ -74,7 +69,6 @@ class ShippingInstructionEditController extends Controller
             $spalDocument = $fileName;
         }
 
-        // Handle MRA & RAB document upload
         $mraRabDocument = $si->mra_rab_document;
         if ($request->hasFile('mra_rab_document')) {
             if ($si->mra_rab_document && \Storage::exists('public/mra_rab_documents/' . $si->mra_rab_document)) {
@@ -86,14 +80,13 @@ class ShippingInstructionEditController extends Controller
             $mraRabDocument = $fileName;
         }
 
-        // Determine completed_at based on SPAL & MRA RAB data
         $completedAt = null;
         if ($request->spal_number && $spalDocument && $mraRabDocument) {
             $completedAt = now();
         }
 
         $si->update([
-            'number' => $newNumber, // update nomor SI jika vendor berubah
+            'number' => $newNumber,
             'to' => $request->to,
             'tugbarge' => $request->tugbarge,
             'flag' => $request->flag,
@@ -109,7 +102,7 @@ class ShippingInstructionEditController extends Controller
             'place' => $request->place,
             'date' => $request->date,
             'signed_by' => $request->signed_by,
-            'remarks' => 'Freight Payable as Per Charter Party (SPAL)', // Set otomatis
+            'remarks' => 'Freight Payable as Per Charter Party (SPAL)',
             'spal_number' => $request->spal_number,
             'spal_document' => $spalDocument,
             'completed_at' => $completedAt,
@@ -118,6 +111,7 @@ class ShippingInstructionEditController extends Controller
             'vessel_arrived_note' => $request->vessel_arrived_note,
             'project_type' => $request->project_type ?? 'default',
             'mra_rab_document' => $mraRabDocument,
+            'mra_number' => $request->mra_number,
         ]);
         
         return redirect()->route('shipping-instruction.detail', $id)

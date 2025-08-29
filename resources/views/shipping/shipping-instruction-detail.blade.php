@@ -94,7 +94,7 @@
                                     <p class="text-blue-900 font-medium">
                                         {{ $data['vessel_arrived'] ? \Carbon\Carbon::parse($data['vessel_arrived'])->format('d F Y') : '-' }}
                                         @if(!empty($data['vessel_arrived_note']))
-                                        <span class="text-blue-700 ml-2">({{ $data['vessel_arrived_note'] }})</span>
+                                        <span class="text-blue-900 ml-2">{{ $data['vessel_arrived_note'] }}</span>
                                         @endif
                                     </p>
                                 </div>
@@ -271,10 +271,16 @@
                         <i class="fas fa-file-contract text-blue-500 mr-2"></i>
                         MRA & RAB Document
                     </h4>
-                    <p class="text-sm text-gray-600 mt-1">Marine Risk Assessment and Risk Analysis document</p>
+                    <p class="text-sm text-gray-600 mt-1">Memo Realisasi Anggaran & Rancangan Awal Biaya document</p>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500 mb-2">MRA Number</label>
+                            <div class="bg-gray-50 p-3 rounded-lg border">
+                                <p class="text-gray-900">{{ $data['mra_number'] ?? '-' }}</p>
+                            </div>
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-500 mb-2">MRA & RAB Document</label>
                             <div class="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
@@ -352,7 +358,7 @@
                         <span class="text-gray-500">Status:</span>
                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
                             {{ $si->status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                            <i class="fas {{ $si->status === 'Completed' ? 'fa-check-circle' : 'fa-exclamation-circle' }} mr-1.5"></i>
+                            <i class="fas {{ $si->status === 'Completed' ? 'fa-check-circle' : 'fas fa-clock' }} mr-1.5"></i>
                             {{ $si->status }}
                         </span>
                     </div>

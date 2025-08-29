@@ -102,17 +102,25 @@
                             <label class="flex items-center space-x-3 p-3 hover:bg-white rounded-lg transition-colors duration-200 cursor-pointer">
                                 <input type="checkbox" name="columns[]" value="date" checked 
                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <div class="flex-1">
+                                       <div class="flex-1">
                                     <span class="text-sm font-medium text-gray-700">Date</span>
                                     <span class="text-xs text-gray-500 block">(Document date)</span>
                                 </div>
                             </label>
                             <label class="flex items-center space-x-3 p-3 hover:bg-white rounded-lg transition-colors duration-200 cursor-pointer">
                                 <input type="checkbox" name="columns[]" value="number" checked 
-                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                                 <div class="flex-1">
                                     <span class="text-sm font-medium text-gray-700">Number</span>
                                     <span class="text-xs text-gray-500 block">(SI Number)</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 hover:bg-white rounded-lg transition-colors duration-200 cursor-pointer">
+                                <input type="checkbox" name="columns[]" value="spal_number" 
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <div class="flex-1">
+                                    <span class="text-sm font-medium text-gray-700">SPAL Number</span>
+                                    <span class="text-xs text-gray-500 block">(SPAL document number)</span>
                                 </div>
                             </label>
                             <label class="flex items-center space-x-3 p-3 hover:bg-white rounded-lg transition-colors duration-200 cursor-pointer">
@@ -177,14 +185,6 @@
                                 <div class="flex-1">
                                     <span class="text-sm font-medium text-gray-700">Port Discharging</span>
                                     <span class="text-xs text-gray-500 block">(Discharge port)</span>
-                                </div>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 hover:bg-white rounded-lg transition-colors duration-200 cursor-pointer">
-                                <input type="checkbox" name="columns[]" value="spal_number" 
-                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <div class="flex-1">
-                                    <span class="text-sm font-medium text-gray-700">SPAL Number</span>
-                                    <span class="text-xs text-gray-500 block">(SPAL document number)</span>
                                 </div>
                             </label>
                             <label class="flex items-center space-x-3 p-3 hover:bg-white rounded-lg transition-colors duration-200 cursor-pointer">

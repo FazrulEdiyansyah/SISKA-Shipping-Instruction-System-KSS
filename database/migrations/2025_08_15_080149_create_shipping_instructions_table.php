@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('signed_by');
             $table->string('remarks')->nullable();
             $table->string('project_type')->default('default');
+            $table->string('mra_number')->nullable();
             $table->timestamps();
         });
     }
@@ -46,6 +47,7 @@ return new class extends Migration
         Schema::table('shipping_instructions', function (Blueprint $table) {
             $table->dropColumn('vessel_arrived_note');
             $table->dropColumn('project_type');
+            $table->dropColumn('mra_number');
         });
 
         Schema::dropIfExists('shipping_instructions');
