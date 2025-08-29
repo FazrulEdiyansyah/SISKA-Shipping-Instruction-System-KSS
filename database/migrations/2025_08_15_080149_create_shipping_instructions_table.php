@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('remarks')->nullable();
             $table->string('project_type')->default('default');
             $table->string('mra_number')->nullable();
+            $table->string('mra_rab_document')->nullable();
             $table->timestamps();
         });
     }
