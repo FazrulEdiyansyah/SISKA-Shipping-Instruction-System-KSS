@@ -79,4 +79,16 @@ class ShippingInstructionController extends Controller
         $si->save();
 
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            // ...existing validation...
+            'mra_number' => 'required|string|max:255',
+        ]);
+        $data = $request->all();
+        $shippingInstruction = ShippingInstruction::create($data);
+
+        return response()->json($shippingInstruction, 201);
+    }
 }

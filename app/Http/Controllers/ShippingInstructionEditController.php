@@ -111,6 +111,7 @@ class ShippingInstructionEditController extends Controller
             'vessel_arrived_note' => $request->vessel_arrived_note,
             'project_type' => $request->project_type ?? 'default',
             'mra_rab_document' => $mraRabDocument,
+            'mra_number' => $request->mra_number,
         ]);
         
         return redirect()->route('shipping-instruction.detail', $id)

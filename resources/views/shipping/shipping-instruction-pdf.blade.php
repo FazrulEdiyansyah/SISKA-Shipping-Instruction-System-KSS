@@ -201,7 +201,7 @@
     <br><br><br>
     <div class="signature-block">
         <p class="signature-name">{{ $signed_by_name ?? '-' }}</p>
-        <p class="signature-pos">{{ $position ?? '-' }} {{ $department ?? '-' }}</p>
+        <p class="signature-pos">{{ $department ?? '-' }} {{ $position ?? '-' }}</p>
     </div>
 
     <div class="fixed-footer">

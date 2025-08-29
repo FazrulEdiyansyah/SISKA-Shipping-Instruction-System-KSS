@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Models\ShippingInstruction;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\SignatoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ShippingInstructionController;
 use App\Http\Controllers\ReportController;
-use App\Models\ShippingInstruction;
 use App\Models\Vendor;
 
 Route::get('/', function () {
@@ -31,9 +31,10 @@ Route::get('/shipping-instruction', function () {
 });
 
 Route::post('/shipping-instruction', function (Request $request) {
-    $data = ShippingInstruction::prepareData($request->all());
-    $pdf = Pdf::loadView('shipping.shipping-instruction-pdf', $data);
-    return $pdf->download('shipping-instruction.pdf');
+    $data = $request->all();
+    // ...tambahkan validasi jika perlu...
+    $si = ShippingInstruction::create($data);
+    return redirect('/shipping-instruction')->with('success', 'Shipping Instruction saved successfully!');
 });
 
 Route::post('/shipping-instruction/generate-number', function(Request $request) {

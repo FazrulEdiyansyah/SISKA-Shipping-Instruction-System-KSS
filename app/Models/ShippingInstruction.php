@@ -18,6 +18,7 @@ class ShippingInstruction extends Model
         'signed_by', 'remarks',
         'spal_number', 'spal_document',
         'mra_rab_document',
+        'mra_number',
         'completed_at',
         'project_type',
     ];
